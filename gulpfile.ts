@@ -20,7 +20,7 @@ export class Gulpfile {
 
   @SequenceTask("build")
   build(){
-    return ["buildServer"];
+    return ["buildServer", "copyServerFiles"];
   }
 
   @Task("buildServer")
@@ -28,10 +28,21 @@ export class Gulpfile {
     let tsProject = ts.createProject(path.resolve("./server/tsconfig.json"));
 
     return gulp
-      .src(path.resolve("./server/src/**/*.ts"))
+      .src([
+        path.resolve("./server/src/**/*.ts"),
+        path.resolve("./server/typings/main.d.ts")
+      ]
+      )
       .pipe(ts(tsProject))
       .js
       .pipe(gulp.dest(path.resolve("./dist")));
+  }
+
+  @Task("copyServerFiles")
+  copyServerFiles(){
+    //return gulp
+    gulp.src(path.resolve("./server/assets/**/*")).pipe(gulp.dest(path.resolve("./dist/assets")));
+    gulp.src(path.resolve("./server/views/**/*")).pipe(gulp.dest(path.resolve("./dist/views")));
   }
 
   @SequenceTask()
