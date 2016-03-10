@@ -1,0 +1,32 @@
+doctype html
+html
+  head
+    meta(charset="utf8")
+    base(href="/")
+    title When Can I Retire?
+
+    // Stuff Required for angular2
+    script(src="//cdnjs.cloudflare.com/ajax/libs/es6-shim/0.35.0/es6-shim.js")
+    script(src="//cdnjs.cloudflare.com/ajax/libs/systemjs/0.19.23/system-polyfills.js")
+    // shims for IE go here
+    script(src="//cdnjs.cloudflare.com/ajax/libs/angular.js/2.0.0-beta.8/angular2-polyfills.js")
+    script(src="//cdnjs.cloudflare.com/ajax/libs/systemjs/0.19.23/system.src.js")
+    script(src="//cdnjs.cloudflare.com/ajax/libs/angular.js/2.0.0-beta.8/Rx.js")
+    script(src="//cdnjs.cloudflare.com/ajax/libs/angular.js/2.0.0-beta.8/angular2.dev.js")
+
+    //script(src="//ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js")
+    //script(src="//ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js")
+    script(src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js", integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS", crossorigin="anonymous")
+
+    //script(src="/js/contrib/moment.min.js")
+    //script(src="/js/contrib/accounting.min.js")
+
+    link(href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css", rel="stylesheet", integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7", crossorigin="anonymous")
+    //link(href="//ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/themes/ui-lightness/jquery-ui.css", rel="stylesheet")
+    //script(src="/js/main.js")
+    //script(src"assets/js/main.js")
+    script
+      include ../public/js/main.js
+
+  body
+    block body
