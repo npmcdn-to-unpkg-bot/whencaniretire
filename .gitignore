@@ -34,3 +34,6 @@ node_modules
 
 #Typings files
 **/typings
+
+#Built application (transpiled from TypeScript)
+dist
