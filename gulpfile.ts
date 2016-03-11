@@ -8,6 +8,11 @@ import ts = require("gulp-typescript");
 @Gulpclass()
 export class Gulpfile {
 
+  @SequenceTask("run")
+  run(){
+    return ["buildClean", "startApp"];
+  }
+
   @SequenceTask("buildClean")
   buildClean(){
     return ["clean", "build"];
@@ -20,7 +25,7 @@ export class Gulpfile {
 
   @SequenceTask("build")
   build(){
-    return ["buildServer", "copyServerFiles"];
+    return ["buildServer", "copyServerFiles", "buildClient"];
   }
 
   @Task("buildServer")
@@ -38,11 +43,31 @@ export class Gulpfile {
       .pipe(gulp.dest(path.resolve("./dist")));
   }
 
+  @Task("buildClient")
+  buildClient(){
+    let tsProject = ts.createProject(path.resolve("./client/tsconfig.json"));
+
+    return gulp
+      .src([
+        path.resolve("./client/src/**/*.ts"),
+        path.resolve("./client/typings/browser.d.ts")
+      ]
+      )
+      .pipe(ts(tsProject))
+      .js
+      .pipe(gulp.dest(path.resolve("./dist/assets/js/client")));
+  }
+
   @Task("copyServerFiles")
   copyServerFiles(){
     //return gulp
-    gulp.src(path.resolve("./server/assets/**/*")).pipe(gulp.dest(path.resolve("./dist/assets")));
-    gulp.src(path.resolve("./server/views/**/*")).pipe(gulp.dest(path.resolve("./dist/views")));
+    //gulp.src(path.resolve("./server/assets/**/*")).pipe(gulp.dest(path.resolve("./dist/assets")));
+    return gulp.src(path.resolve("./server/views/**/*")).pipe(gulp.dest(path.resolve("./dist/views")));
+  }
+
+  @Task("startApp")
+  startApp(){
+
   }
 
   @SequenceTask()
