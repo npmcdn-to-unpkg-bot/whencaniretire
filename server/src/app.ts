@@ -3,22 +3,22 @@ const PROD: string = "production";
 
 import * as express from "express";
 import * as bodyParser from "body-parser";
-import morgan = require("morgan");
-//import bodyParser = require("body-parser");
-//import routes = require("../routes");
-import errorHandler = require("errorhandler");
-import path = require("path");
+import * as morgan from "morgan";
+import * as errorHandler from "errorhandler";
+import * as path from "path";
+//import * as process from "process"; DOESN'T YET WORK, no typings
 let process = require("process");
-let routes = require("./routes");
+import * as routes from "./routes";
 
 var app = express();
+
 app.set("env", DEV);
 app.set("port", 3000);
 app.set("views", path.resolve(__dirname, "views"));
 app.set("view engine", "jade");
 app.use(morgan("dev"));
 app.use(bodyParser.json());
-app.use("/assets", express.static(path.resolve(__dirname, "../assets")));
+app.use("/assets", express.static(path.resolve(__dirname, "assets")));
 
 
 app.get("/assets/*", (req, res) => {
