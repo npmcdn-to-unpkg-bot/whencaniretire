@@ -5,26 +5,17 @@ html
     base(href="/")
     title When Can I Retire?
 
-    // Stuff Required for angular2
-    //script(src="https://cdnjs.cloudflare.com/ajax/libs/es6-shim/0.35.0/es6-shim.js")
-    //script(src="https://cdnjs.cloudflare.com/ajax/libs/systemjs/0.19.24/system-polyfills.js")
-    // shims for IE go here
-    //script(src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/2.0.0-beta.9/angular2-polyfills.js", crossOrigin="anonymous")
-    script(src="https://cdnjs.cloudflare.com/ajax/libs/systemjs/0.19.24/system.src.js", crossOrigin="anonymous")
-    //script(src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/2.0.0-beta.9/Rx.js", crossOrigin="anonymous")
-    script(src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/2.0.0-beta.9/angular2.dev.js", crossOrigin="anonymous")
 
-    script(src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js")
-    //script(src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js")
-    script(src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js", integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS", crossorigin="anonymous")
+    //IE required polyfills, in this exact order
+    script(src="https://cdnjs.cloudflare.com/ajax/libs/es6-shim/0.33.3/es6-shim.min.js")
+    script(src="https://cdnjs.cloudflare.com/ajax/libs/systemjs/0.19.20/system-polyfills.js")
+    script(src="https://npmcdn.com/angular2@2.0.0-beta.9/es6/dev/src/testing/shims_for_IE.js")
 
-    //script(src="/js/contrib/moment.min.js")
-    //script(src="/js/contrib/accounting.min.js")
-
-    link(href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css", rel="stylesheet", integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7", crossorigin="anonymous")
-    //link(href="//ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/themes/ui-lightness/jquery-ui.css", rel="stylesheet")
-    //script(src="/js/main.js")
-    //script(src"assets/js/main.js")
+    script(src="https://code.angularjs.org/2.0.0-beta.9/angular2-polyfills.js")
+    script(src="https://code.angularjs.org/tools/system.js")
+    script(src="https://npmcdn.com/typescript@1.8.2/lib/typescript.js")
+    script(src="https://code.angularjs.org/2.0.0-beta.9/Rx.js")
+    script(src="https://code.angularjs.org/2.0.0-beta.9/angular2.dev.js")
     script
       include ../assets/js/client/main.js
 
