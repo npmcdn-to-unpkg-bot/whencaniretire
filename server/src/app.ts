@@ -21,12 +21,11 @@ app.use(bodyParser.json());
 app.use("/assets", express.static(path.resolve(__dirname, "assets")));
 
 
-app.get("/assets/*", (req, res) => {
-  res.status(404).send("Not found");
-});
 
 app.get("/", routes.index);
 app.get("/partials/:partial", routes.partials);
+app.get("/assets/*", routes.notfound);
+app.get("/favicon.ico", routes.notfound);
 
 if(DEV == app.get("env")){
   app.use(errorHandler);
@@ -41,3 +40,4 @@ process.on("SIGINT", () => {
   console.log("Exiting.");
   process.exit(0);
 });
+
