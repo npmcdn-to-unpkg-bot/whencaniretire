@@ -10,10 +10,10 @@ import {AppConfig} from "./app.configuration";
 @RouteConfig(AppConfig.routes)
 export class AppComponent {
 
-  constructor(private _router: Router) {
+  constructor(private _router: Router){
   }
 
-  public _routes: any = AppConfig.routes;
+  public _routes: RouteDefinition[] = AppConfig.routes;
 
   isRouteActive(route: string): boolean {
     return this._router.isRouteActive(this._router.generate([route]));

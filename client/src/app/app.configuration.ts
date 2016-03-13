@@ -1,4 +1,4 @@
-import {RouteDefinition} from "angular2/router";
+//import {RouteDefinition} from "angular2/router";
 
 import {DashboardComponent} from "./dashboard.component";
 import {ActivityComponent} from "./activity.component";
