@@ -7,34 +7,49 @@ import * as nodemon from "gulp-nodemon";
 import * as plumber from "gulp-plumber";
 import * as sass from "gulp-sass";
 
+
 @Gulpclass()
 export class Gulpfile {
 
 
+  static getSrc(cfg: any): string[] {
+    return cfg.src.map((val, idx, thisArg): string => {
+      return path.resolve(cfg.baseDir, val);
+    });
+  }
+
+  static getWatcher(cfg: any): any {
+    return gulp.watch(Gulpfile.getSrc(cfg), cfg.watchTasks);
+  }
+
   static config = {
     server: {
+      baseDir: "./server",
       src: [
-        path.resolve("./server/src/**/*.ts"),
-        path.resolve("./server/typings/main.d.ts")
+        "src/**/*.ts",
+        "typings/main.d.ts"
       ],
       dest: "",
       watchTasks: ["buildServer"]
-    }
+    },
     client: {
+      baseDir: "./client",
       src: [
-        path.resolve("./client/src/**/*.ts"),
-        path.resolve("./client/typings/browser.d.ts")
+        "src/**/*.ts",
+        "typings/browser.d.ts"
       ],
       dest: "assets/js/client",
       watchTasks: ["buildClient"]
     },
     html: {
-      src: path.resolve("./server/views/**/*.jade"),
+      baseDir: "./html",
+      src: ["**/*.jade"],
       dest: "views",
       watchTasks: ["buildHtml"]
     },
     css: {
-      src: path.resolve("./assets/css/**/*.scss"),
+      baseDir: "assets/css",
+      src: ["**/*.scss"],
       dest: "assets/css",
       watchTasks: ["buildCss"]
     }
@@ -48,7 +63,7 @@ export class Gulpfile {
   app(){
     let nodemonSettings = {
       script: path.resolve("./dist/app.js"),
-      watch: path.resolve("./dist")
+      watch: path.resolve("./dist"),
       ext: "js jade"
     };
 
@@ -77,24 +92,30 @@ export class Gulpfile {
     return;
   }
 
+  static getSrc(cfg): string[] {
+    return cfg.src.map((val, idx, thisArg): string => {
+      return path.resolve(cfg.baseDir, val);
+    });
+  }
+
   @Task("watchServer")
   watchServer(){
-    return gulp.watch(Gulpfile.config.server.src, Gulpfile.config.server.watchTasks);
+    return Gulpfile.getWatcher(Gulpfile.config.server);
   }
 
   @Task("watchClient")
   watchClient(){
-    return gulp.watch(Gulpfile.config.client.src, Gulpfile.config.client.watchTasks);
+    return Gulpfile.getWatcher(Gulpfile.config.client);
   }
 
   @Task("watchHtml")
   watchHtml(){
-    return gulp.watch(Gulpfile.config.html.src, Gulpfile.config.html.watchTasks);
+    return Gulpfile.getWatcher(Gulpfile.config.html);
   }
 
   @Task("watchCss")
   watchCss(){
-    return gulp.watch(Gulpfile.config.css.src, Gulpfile.config.css.watchTasks);
+    return Gulpfile.getWatcher(Gulpfile.config.css);
   }
 
   @Task("buildServer")
@@ -102,7 +123,7 @@ export class Gulpfile {
     let tsProject = ts.createProject(path.resolve("./server/tsconfig.json"));
 
     return gulp
-      .src(Gulpfile.config.server.src)
+      .src(Gulpfile.getSrc(Gulpfile.config.server))
       .pipe(ts(tsProject))
       .js
       .pipe(gulp.dest(path.resolve("./dist", Gulpfile.config.server.dest)));
@@ -113,7 +134,7 @@ export class Gulpfile {
     let tsProject = ts.createProject(path.resolve("./client/tsconfig.json"));
 
     return gulp
-      .src(Gulpfile.config.client.src)
+      .src(Gulpfile.getSrc(Gulpfile.config.client))
       .pipe(ts(tsProject))
       .js
       .pipe(gulp.dest(path.resolve("./dist", Gulpfile.config.client.dest)));
@@ -122,14 +143,14 @@ export class Gulpfile {
   @Task("buildHtml")
   buildHtml(){
     return gulp
-      .src(Gulpfile.config.html.src)
+      .src(Gulpfile.getSrc(Gulpfile.config.html))
       .pipe(gulp.dest(path.resolve("./dist", Gulpfile.config.html.dest)));
   }
 
   @Task("buildCss")
   buildCss(){
     return gulp
-      .src(Gulpfile.config.css.src)
+      .src(Gulpfile.getSrc(Gulpfile.config.css))
       .pipe(sass())
       .pipe(gulp.dest(path.resolve("./dist", Gulpfile.config.css.dest)));
   }
