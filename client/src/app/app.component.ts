@@ -1,26 +1,29 @@
 import {Component} from "angular2/core";
-import {Router, RouteConfig, ROUTER_DIRECTIVES} from "angular2/router";
-
-import {DashboardComponent} from "./dashboard.component";
-import {ActivityComponent} from "./activity.component";
+import {Router, RouteConfig, RouteDefinition, ROUTER_DIRECTIVES} from "angular2/router";
+import {AppConfig} from "./app.configuration";
 
 @Component({
   selector: "wcir-app",
   templateUrl: "/partials/app",
   directives: [ROUTER_DIRECTIVES]
 })
-@RouteConfig([
-  {path: "/dashboard", name: "Dashboard", component: DashboardComponent, useAsDefault: true},
-  {path: "/activity", name: "Activity", component: ActivityComponent}
-//  {path: "/funds", name: "Funds", component: FundsComponent},
-//  {path: "/reporting", name: "Reporting, component: ReportingComponent}
-])
+@RouteConfig(AppConfig.routes)
 export class AppComponent {
 
   constructor(private _router: Router) {
   }
 
+  public _routes: any = AppConfig.routes;
+
+  isRouteActive(route: string): boolean {
+    return this._router.isRouteActive(this._router.generate([route]));
+  }
+
   public title: string = "When can I retire?";
+
+  trackRouteByPath(index: number, route: RouteDefinition): string {
+    return route.path;
+  }
 
 
 }

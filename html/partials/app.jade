@@ -9,12 +9,9 @@ nav.navbar.navbar-default.navbar-fixed-top
       a.navbar-brand(href="#") {{title}}
     div.collapse.navbar-collapse#navbar
       ul.nav.navbar-nav
-        li([class.active]="_router.isRouteActive(_router.generate([\"Dashboard\"]))")
-          a(bind-routerLink="[\"Dashboard\"]") Dashboard
-        li([class.active]="_router.isRouteActive(_router.generate([\"Activity\"]))")
-          a(bind-routerLink="[\"Activity\"]") Activity
-        //li
-          a(bind-routerLink="[\"Funds\"]") Funds
+        li(template="ngFor #route of _routes; trackBy:trackRouteByPath" bind-class.active="isRouteActive(route.name)")
+          a(bind-routerLink="[route.name]") {{route.name}}
+
 div.container-fluid
   router-outlet
 
