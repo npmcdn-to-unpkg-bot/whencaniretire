@@ -23,6 +23,7 @@ app.use("/assets", express.static(path.resolve(__dirname, "assets")));
 
 
 app.get("/", routes.index);
+app.get("/dashboard", routes.index);
 app.get("/partials/:partial", routes.partials);
 app.get("/assets/*", routes.notfound);
 app.get("/favicon.ico", routes.notfound);
