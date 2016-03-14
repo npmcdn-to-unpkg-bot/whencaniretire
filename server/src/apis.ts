@@ -1,13 +1,19 @@
-import {Router} from "express";
-import {FundsApi} from "./api.funds"
+import * as express from "express";
+import * as FundsApi from "./api.funds"
 
-export class ApiRouter implements Router {
+export class ApiRouter {
 
-  constructor(){
+  private _app: Application;
+  private _router: Router;
+
+  constructor(app: Application){
     // Call Router()
-    super();
 
-    this.use("/funds", new FundsApi());
+    this._router = express.Router();
+    this._app = app;
+    this._app.use("/api", this._router);
+
+    this._router.get("/funds", FundsApi.get);
 
   }
 

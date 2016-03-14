@@ -1,21 +1,10 @@
 import {Router, Request, Response} from "express";
 
-export class FundsApi extends Router {
-
-  constructor(){
-    // Call Router()
-    super();
-
-    this.get("/", this._get);
-
-  }
-
   // Send list of funds
-  _get(req: Request, res: Response, next: Function) {
+export function get(req: Request, res: Response, next: Function): any {
 
-    res.send("testing 1234");
+  res.send("testing 1234");
 
-  }
+}
 
-};
 

@@ -13,6 +13,7 @@ import {ApiRouter} from "./apis";
 
 var app = express();
 
+
 app.set("env", DEV);
 app.set("port", 3000);
 app.set("views", path.resolve(__dirname, "views"));
@@ -21,9 +22,9 @@ app.use(morgan("dev"));
 app.use(bodyParser.json());
 app.use("/assets", express.static(path.resolve(__dirname, "assets")));
 
-
-
-app.get("/api", new ApiRouter());
+// Sets up API routes
+let apiRouter = new ApiRouter(app);
+app.get("/", routes.index);
 app.get("/dashboard", routes.index);
 app.get("/partials/:partial", routes.partials);
 app.get("/assets/*", routes.notfound);
