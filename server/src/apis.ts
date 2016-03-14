@@ -13,7 +13,8 @@ export class ApiRouter {
     this._app = app;
     this._app.use("/api", this._router);
 
-    this._router.get("/funds", FundsApi.get);
+    this._router.get("/funds", FundsApi.getAll);
+    this._router.get("/funds/:fund", FundsApi.getOne);
 
   }
 
