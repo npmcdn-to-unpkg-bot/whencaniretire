@@ -9,6 +9,7 @@ import * as path from "path";
 //import * as process from "process"; DOESN'T YET WORK, no typings
 let process = require("process");
 import * as routes from "./routes";
+import {ApiRouter} from "./apis";
 
 var app = express();
 
@@ -22,7 +23,7 @@ app.use("/assets", express.static(path.resolve(__dirname, "assets")));
 
 
 
-app.get("/", routes.index);
+app.get("/api", new ApiRouter());
 app.get("/dashboard", routes.index);
 app.get("/partials/:partial", routes.partials);
 app.get("/assets/*", routes.notfound);
