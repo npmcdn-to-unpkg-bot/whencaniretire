@@ -14,7 +14,7 @@ export class ApiRouter {
     this._app.use("/api", this._router);
 
     this._router.get("/funds", FundsApi.getAll);
-    this._router.get("/funds/:fund", FundsApi.getOne);
+    this._router.get("/funds/:symbol", FundsApi.getOne);
 
   }
 

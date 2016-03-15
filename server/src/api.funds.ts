@@ -8,5 +8,8 @@ export async function getAll(req: Request, res: Response, next: Function) {
 
 }
 
-export function getOne(req: Request, res: Response, next: Function): any {
+export async function getOne(req: Request, res: Response, next: Function) {
+
+  res.send(await db.all("select * from funds where symbol=(?)", [req.params.symbol]));
+
 }
