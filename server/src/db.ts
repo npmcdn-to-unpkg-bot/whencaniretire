@@ -2,7 +2,7 @@ import * as sqlite3 from "sqlite3";
 
 export class Database {
 
-  private _db: sqlite3.Database;
+  protected _db: sqlite3.Database;
 
   constructor(filename: string){
 
