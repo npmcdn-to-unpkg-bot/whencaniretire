@@ -1,23 +1,55 @@
 import {Router, Request, Response} from "express";
 import * as db from "./db";
 
-  // Send list of funds
-export async function getAll(req: Request, res: Response, next: Function){
-  res.send(await db.all("select * from funds"));
+abstract class GenericApi {
+
+  protected _router: Router;
+
+  constructor(){
+    this.router = Router();
+  }
+
+  public get router(): Router {
+    return this._router;
+  }
+
+  public set router(r: Router){
+
+    this._router = r;
+  }
 }
 
-export async function getOne(req: Request, res: Response, next: Function){
-  res.send(await db.all("select * from funds where symbol=(?)", [req.params.symbol]));
-}
+export class FundsApi extends GenericApi {
 
-export async function createOne(req: Request, res: Response, next: Function){
-  res.send(await db.run("insert into funds(symbol, name) values ((?), (?))", [req.body.symbol, req.body.name]));
-}
+  constructor(){
+    super();
 
-export async function deleteOne(req: Request, res: Response, next: Function){
-  res.send(await db.run("delete from funds where symbol=(?)", [req.params.symbol]));
-}
+    this.router.get("/", this.getAll);
+    this.router.get("/:symbol", this.getOne);
+    this.router.post("/", this.createOne);
+    this.router.put("/:symbol", this.updateOne);
+    this.router.delete("/:symbol", this.deleteOne);
 
-export async function updateOne(req: Request, res: Response, next: Function){
-  res.send(await db.run("update funds set name=(?) where symbol=(?)", [req.body.name, req.params.symbol]));
+  }
+
+  public getAll = async (req: Request, res: Response, next: Function) => {
+    res.send(await db.all("select * from funds"));
+  }
+
+  public getOne = async (req: Request, res: Response, next: Function) => {
+    res.send(await db.all("select * from funds where symbol=(?)", [req.params.symbol]));
+  }
+
+  public createOne = async (req: Request, res: Response, next: Function) => {
+    res.send(await db.run("insert into funds(symbol, name) values ((?), (?))", [req.body.symbol, req.body.name]));
+  }
+
+  public deleteOne = async (req: Request, res: Response, next: Function) => {
+    res.send(await db.run("delete from funds where symbol=(?)", [req.params.symbol]));
+  }
+
+  public updateOne = async (req: Request, res: Response, next: Function) => {
+    res.send(await db.run("update funds set name=(?) where symbol=(?)", [req.body.name, req.params.symbol]));
+  }
+
 }

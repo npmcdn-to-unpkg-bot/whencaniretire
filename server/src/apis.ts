@@ -1,23 +1,38 @@
 import {Application, Router} from "express";
-import * as FundsApi from "./api.funds"
+import {FundsApi} from "./api.funds"
 
-export class ApiRouter {
+export abstract class GenericApi {
+
+  protected _router: Router;
+
+  constructor(){
+    this.router = Router();
+  }
+
+  public get router(): Router {
+    return this._router;
+  }
+
+  public set router(r: Router){
+
+    this._router = r;
+  }
+};
+
+export class ApiRouter extends GenericApi {
 
   private _app: Application;
-  private _router: Router;
+  private _fundsApi: FundsApi;
 
   constructor(app: Application){
-    // Call Router()
+    super();
 
-    this._router = Router();
     this._app = app;
-    this._app.use("/api", this._router);
+    this._app.use("/api", this.router);
 
-    this._router.get("/funds", FundsApi.getAll);
-    this._router.get("/funds/:symbol", FundsApi.getOne);
-    this._router.post("/funds", FundsApi.createOne);
-    this._router.put("/funds/:symbol", FundsApi.updateOne);
-    this._router.put("/funds/:symbol", FundsApi.deleteOne);
+    this._fundsApi = new FundsApi();
+
+    this.router.use("/funds", this._fundsApi.router);
 
   }
 
