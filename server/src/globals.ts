@@ -1,17 +1,17 @@
-import * as sqlite3 from "sqlite3";
 import * as path from "path";
+import {Database} from "./db";
 
 interface GlobalsInterface {
-  DATABASE: sqlite3.Database;
+  DATABASE: Database
 }
 
 class GlobalsImpl implements GlobalsInterface {
 
-  public DATABASE: sqlite3.Database;
+  public DATABASE: Database;
 
   constructor(){
 
-    this.DATABASE = new sqlite3.Database(path.resolve("./dist/wcir.db"));
+    this.DATABASE = new Database(path.resolve("./dist/wcir.db"));
 
   }
 

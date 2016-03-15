@@ -1,23 +1,6 @@
 import {Application, Router} from "express";
 import {FundsApi} from "./api.funds"
-
-export abstract class GenericApi {
-
-  protected _router: Router;
-
-  constructor(){
-    this.router = Router();
-  }
-
-  public get router(): Router {
-    return this._router;
-  }
-
-  public set router(r: Router){
-
-    this._router = r;
-  }
-};
+import {GenericApi} from "./generic-api"
 
 export class ApiRouter extends GenericApi {
 

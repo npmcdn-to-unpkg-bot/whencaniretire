@@ -1,23 +1,6 @@
 import {Router, Request, Response} from "express";
-import * as db from "./db";
-
-abstract class GenericApi {
-
-  protected _router: Router;
-
-  constructor(){
-    this.router = Router();
-  }
-
-  public get router(): Router {
-    return this._router;
-  }
-
-  public set router(r: Router){
-
-    this._router = r;
-  }
-}
+import {DATABASE} from "./globals";
+import {GenericApi} from "./generic-api";
 
 export class FundsApi extends GenericApi {
 
@@ -32,24 +15,29 @@ export class FundsApi extends GenericApi {
 
   }
 
+  // GET
   public getAll = async (req: Request, res: Response, next: Function) => {
-    res.send(await db.all("select * from funds"));
+    res.send(await DATABASE.all("select * from funds"));
   }
 
+  // GET
   public getOne = async (req: Request, res: Response, next: Function) => {
-    res.send(await db.all("select * from funds where symbol=(?)", [req.params.symbol]));
+    res.send(await DATABASE.all("select * from funds where symbol=$symbol", {$symbol: req.params.symbol}));
   }
 
+  // POST
   public createOne = async (req: Request, res: Response, next: Function) => {
-    res.send(await db.run("insert into funds(symbol, name) values ((?), (?))", [req.body.symbol, req.body.name]));
+    res.send(await DATABASE.run("insert into funds(symbol, name) values ($symbol, $name)", {$name: req.body.name, $symbol: req.params.symbol}));
   }
 
+  // DELETE
   public deleteOne = async (req: Request, res: Response, next: Function) => {
-    res.send(await db.run("delete from funds where symbol=(?)", [req.params.symbol]));
+    res.send(await DATABASE.run("delete from funds where symbol=(?)", {$symbol: req.params.symbol}));
   }
 
+  // PUT
   public updateOne = async (req: Request, res: Response, next: Function) => {
-    res.send(await db.run("update funds set name=(?) where symbol=(?)", [req.body.name, req.params.symbol]));
+    res.send(await DATABASE.run("update funds set name=$name where symbol=$symbol", {$name: req.body.name, $symbol: req.params.symbol}));
   }
 
 }
