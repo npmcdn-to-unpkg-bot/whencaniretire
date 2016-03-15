@@ -1,4 +1,4 @@
-import * as express from "express";
+import {Application, Router} from "express";
 import * as FundsApi from "./api.funds"
 
 export class ApiRouter {
@@ -9,7 +9,7 @@ export class ApiRouter {
   constructor(app: Application){
     // Call Router()
 
-    this._router = express.Router();
+    this._router = Router();
     this._app = app;
     this._app.use("/api", this._router);
 

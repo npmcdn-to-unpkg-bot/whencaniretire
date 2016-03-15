@@ -8,4 +8,4 @@ export function getAll(req: Request, res: Response, next: Function): any {
 }
 
 export function getOne(req: Request, res: Response, next: Function): any {
-
+}

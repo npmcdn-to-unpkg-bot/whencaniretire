@@ -6,6 +6,6 @@
     "mime": "registry:dt/mime#0.0.0+20151204023458",
     "morgan": "registry:dt/morgan#1.2.2+20160104041339",
     "node": "registry:dt/node#4.0.0+20160226132328",
-    "serve-static": "registry:dt/serve-static#1.7.1+20160104095738"
+    "serve-static": "registry:dt/serve-static#0.0.0+20160218233549"
   }
 }
