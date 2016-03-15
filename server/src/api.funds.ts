@@ -1,9 +1,10 @@
 import {Router, Request, Response} from "express";
+import * as db from "./db";
 
   // Send list of funds
-export function getAll(req: Request, res: Response, next: Function): any {
+export async function getAll(req: Request, res: Response, next: Function) {
 
-  res.send("testing 1234");
+  res.send(await db.all("select * from funds"));
 
 }
 
