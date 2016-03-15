@@ -1,0 +1,7 @@
+table.table.table-striped.table-hover
+  thead
+    th Symbol
+    th Name
+  tbody(template="ngFor #fund of _funds; trackBy:trackFundBySymbol")
+    td {{fund.symbol}}
+    td {{fund.name}}
