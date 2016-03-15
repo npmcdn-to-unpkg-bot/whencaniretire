@@ -15,6 +15,9 @@ export class ApiRouter {
 
     this._router.get("/funds", FundsApi.getAll);
     this._router.get("/funds/:symbol", FundsApi.getOne);
+    this._router.post("/funds", FundsApi.createOne);
+    this._router.put("/funds/:symbol", FundsApi.updateOne);
+    this._router.put("/funds/:symbol", FundsApi.deleteOne);
 
   }
 
