@@ -1,7 +1,19 @@
 table.table.table-striped.table-hover
   thead
-    th Symbol
-    th Name
+    tr
+      th Symbol
+      th Name
+      th Actions
   tbody(template="ngFor #fund of _funds; trackBy:trackFundBySymbol")
-    td {{fund.symbol}}
-    td {{fund.name}}
+    tr
+      td {{fund.symbol}}
+      td {{fund.name}}
+      td
+        button.btn.btn-primary(type="button", on-click="editFund(fund.symbol)") Edit
+        button.btn.btn-danger(type="button", on-click="deleteFund(fund.symbol)") Delete
+  tfoot
+    tr
+      td
+      td
+      td
+        button.btn.btn-success(type="button", on-click="addFund()") Add
