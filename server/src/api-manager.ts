@@ -1,14 +1,15 @@
 import {Request, Response, Router} from "express";
 import {FundsApi} from "./api.funds"
-import {GenericApi} from "./generic-api"
-import {Database} from "./db"
-
+import {ApiMethod, GenericApi} from "./generic-api"
+import {Database} from "./db";
+/*
 declare module Express {
-interface Request {
+  interface Request {
 
-  database: Database;
-};
-
+    database: Database;
+  }
+}
+*/
 
 export class ApiManager extends GenericApi {
 
@@ -18,7 +19,7 @@ export class ApiManager extends GenericApi {
   constructor(){
     super();
 
-    this._database = new Database("./dist/wcir.db");
+    this._database = new Database("./wcir.db");
     this._fundsApi = new FundsApi();
 
     this.router.use(this.databaseInjector);
@@ -27,22 +28,21 @@ export class ApiManager extends GenericApi {
 
     this.router.use(this.errorHandler);
 
-  }
+  };
 
   private databaseInjector = (req: Request, res: Response, next: Function) => {
 
     req.database = this._database;
 
     next();
-  }
+  };
 
   private errorHandler = (err: any, req: Request, res: Response, next: Function) => {
 
-   res.status(500).send(err);
+    res.status(500).send(err);
 
   };
-
-
-
 };
+
+
 

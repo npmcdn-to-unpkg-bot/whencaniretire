@@ -37,3 +37,4 @@ node_modules
 
 #Built application (transpiled from TypeScript)
 dist
+wcir.db

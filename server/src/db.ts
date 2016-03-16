@@ -1,7 +1,7 @@
 import * as sqlite3 from "sqlite3";
 import * as path from "path";
 
-export class Database {
+export class Database implements Database.IDatabase {
 
   protected _db: sqlite3.Database;
 
@@ -36,6 +36,7 @@ export class Database {
   // Returns a Promise which can be consumed with an async/await method
   // Returns all data found.
   all(sql: string, params?: any): Promise<any> {
+    console.log("in all " + sql);
 
     return new Promise((resolve, reject) => {
 
@@ -55,3 +56,5 @@ export class Database {
 
 
 }
+
+
