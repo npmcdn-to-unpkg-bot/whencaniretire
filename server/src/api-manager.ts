@@ -1,22 +1,48 @@
-import {Application, Router} from "express";
+import {Request, Response, Router} from "express";
 import {FundsApi} from "./api.funds"
 import {GenericApi} from "./generic-api"
+import {Database} from "./db"
 
-export class ApiRouter extends GenericApi {
+declare module Express {
+interface Request {
 
-  private _app: Application;
+  database: Database;
+};
+
+
+export class ApiManager extends GenericApi {
+
   private _fundsApi: FundsApi;
+  private _database: Database;
 
-  constructor(app: Application){
+  constructor(){
     super();
 
-    this._app = app;
-    this._app.use("/api", this.router);
-
+    this._database = new Database("./dist/wcir.db");
     this._fundsApi = new FundsApi();
+
+    this.router.use(this.databaseInjector);
 
     this.router.use("/funds", this._fundsApi.router);
 
+    this.router.use(this.errorHandler);
+
   }
 
+  private databaseInjector = (req: Request, res: Response, next: Function) => {
+
+    req.database = this._database;
+
+    next();
+  }
+
+  private errorHandler = (err: any, req: Request, res: Response, next: Function) => {
+
+   res.status(500).send(err);
+
+  };
+
+
+
 };
+
