@@ -62,6 +62,9 @@ export class Gulpfile {
   @Task("app", ["buildServer", "buildHtml", "buildClient", "buildCss"])
   app(){
     let nodemonSettings = {
+      execMap: {
+        js: "node --harmony-destructuring --harmony_rest_parameters"
+      },
       script: path.resolve("./dist/app.js"),
       watch: path.resolve("./dist"),
       ext: "js jade"
