@@ -1,4 +1,5 @@
 import * as sqlite3 from "sqlite3";
+import * as path from "path";
 
 export class Database {
 
@@ -6,7 +7,7 @@ export class Database {
 
   constructor(filename: string){
 
-    this._db = new sqlite3.Database(filename);
+    this._db = new sqlite3.Database(path.resolve(filename));
 
   }
 
@@ -20,18 +21,10 @@ export class Database {
       this._db.run(sql, params, (err) => {
 
         if(null === err){
-          resolve({
-            status: "OK",
-            error: null,
-            data: null
-          });
+          resolve({});
         }
         else {
-          resolve({
-            status: "Error",
-            error: err,
-            data: null
-          });
+          reject(err);
         }
       });
 
@@ -49,18 +42,10 @@ export class Database {
       this._db.all(sql, params, (err, data) => {
 
         if(null === err){
-          resolve({
-            status: "OK",
-            error: null,
-            data: data
-          });
+          resolve(data);
         }
         else {
-          resolve({
-            status: "Error",
-            error: err,
-            data: null
-          });
+          reject(err);
         }
 
       });
