@@ -1,4 +1,11 @@
 import {Component} from "angular2/core";
+import {RouteConfig} from "angular2/router";
+import {FundsService} from "./funds.service";
+
+interface Fund {
+  symbol: string;
+  name: string;
+};
 
 @Component({
   selector: "wcir-funds",
@@ -6,10 +13,24 @@ import {Component} from "angular2/core";
 })
 export class FundsComponent {
 
-  public _funds = [
-    {symbol: "ANEFX", name: "American Funds The New Economy Fund®  Class A"}
-  ];
-}
+  constructor(private _fundsService: FundsService){
+    this._funds = _fundsService.getAll();
+  }
+
+  public _funds: Fund[];
+
+  editFund(symbol: string): void {
+    console.log(symbol);
+  }
+
+  deleteFund(symbol: string): void {
+
+  }
+
+  addFund(): void {
+
+  }
+};
 
 
 
