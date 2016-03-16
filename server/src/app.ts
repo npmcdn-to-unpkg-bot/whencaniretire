@@ -9,10 +9,9 @@ import * as path from "path";
 //import * as process from "process"; DOESN'T YET WORK, no typings
 let process = require("process");
 import * as routes from "./routes";
-import {ApiRouter} from "./apis";
+import {ApiManager} from "./api-manager";
 
 var app = express();
-
 
 app.set("env", DEV);
 app.set("port", 3000);
@@ -22,10 +21,12 @@ app.use(morgan("dev"));
 app.use(bodyParser.json());
 app.use("/assets", express.static(path.resolve(__dirname, "assets")));
 
-// Sets up API routes
-let apiRouter = new ApiRouter(app);
-app.get("/", routes.index);
-app.get("/dashboard", routes.index);
+
+["/", "/dashboard", "/funds", "/activity"].forEach((s) => {
+  app.get(s, routes.index);
+});
+let apiManager = new ApiManager();
+app.use("/api", apiManager.router);
 app.get("/partials/:partial", routes.partials);
 app.get("/assets/*", routes.notfound);
 app.get("/favicon.ico", routes.notfound);
