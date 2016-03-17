@@ -6,6 +6,7 @@ import * as ts from "gulp-typescript";
 import * as nodemon from "gulp-nodemon";
 import * as plumber from "gulp-plumber";
 import * as sass from "gulp-sass";
+import * as flatten from "gulp-flatten";
 
 
 @Gulpclass()
@@ -36,10 +37,19 @@ export class Gulpfile {
       baseDir: "./client",
       src: [
         "src/**/*.ts",
-        "typings/browser.d.ts"
+        "../build-tools/typings/browser.d.ts"
       ],
       dest: "assets/js/client",
       watchTasks: ["buildClient"]
+    },
+    angular2Modal: {
+      baseDir: "./",
+      src: [
+        "node_modules/angular2-modal/src/components/angular2-modal/**/*.ts",
+        "build-tools/typings/browser.d.ts"
+      ],
+      dest: "assets/js/lib/angular2-modal",
+      watchTasks: []
     },
     html: {
       baseDir: "./html",
@@ -59,7 +69,7 @@ export class Gulpfile {
   run(){
   }
 
-  @Task("app", ["buildServer", "buildHtml", "buildClient", "buildCss"])
+  @Task("app", ["buildServer", "buildHtml", "buildClient", "buildAngular2Modal", "buildCss"])
   app(){
     let nodemonSettings = {
       execMap: {
@@ -134,7 +144,7 @@ export class Gulpfile {
 
   @Task("buildClient")
   buildClient(){
-    let tsProject = ts.createProject(path.resolve("./client/tsconfig.json"));
+    let tsProject = ts.createProject(path.resolve("./build-tools/client-tsconfig.json"));
 
     return gulp
       .src(Gulpfile.getSrc(Gulpfile.config.client))
@@ -142,6 +152,19 @@ export class Gulpfile {
       .js
       .pipe(gulp.dest(path.resolve("./dist", Gulpfile.config.client.dest)));
   }
+
+  @Task("buildAngular2Modal")
+  buildAnguarModal(){
+    let tsProject = ts.createProject(path.resolve("./build-tools/client-tsconfig.json"));
+    console.log(Gulpfile.getSrc(Gulpfile.config.angular2Modal));
+
+    return gulp
+      .src(Gulpfile.getSrc(Gulpfile.config.angular2Modal))
+      .pipe(ts(tsProject))
+      .js
+      .pipe(gulp.dest(path.resolve("./dist", Gulpfile.config.angular2Modal.dest)));
+  }
+
 
   @Task("buildHtml")
   buildHtml(){
