@@ -1,4 +1,4 @@
-import {Request, Response, NextFunction, Router, IRouterMatcher, RequestHandler} from "express";
+import {Request, Response, NextFunction, Router, IRouterMatcher, RequestHandler, ErrorRequestHandler} from "express";
 import {Database} from "./Database"
 
 export enum ApiMethod {
@@ -43,7 +43,7 @@ export abstract class GenericApi {
     this._router = r;
   }
 
-  protected wrapError = (fn: RequestHandler ) => {
+  protected wrapError = (fn: RequestHandler) => ErrorRequestHandler => {
     return (req: Request, res: Response, next: NextFunction) => {
       fn(req, res, next).catch(next);
     };
