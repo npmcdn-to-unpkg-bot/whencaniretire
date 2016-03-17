@@ -1,7 +1,7 @@
 import {Request, Response, Router} from "express";
-import {FundsApi} from "./api.funds"
-import {ApiMethod, GenericApi} from "./generic-api"
-import {Database} from "./db";
+import {FundsApi} from "./FundsApi"
+import {ApiMethod, GenericApi} from "./GenericApi"
+import {Database} from "./Database";
 /*
 declare module Express {
   interface Request {

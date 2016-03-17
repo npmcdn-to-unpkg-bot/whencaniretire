@@ -1,5 +1,5 @@
 declare module Database {
-  interface IDatabase {
+  interface DatabaseIntf {
 
     run(sql: string, params?: any): Promise<any>;
     all(sql: string, params?: any): Promise<any>;

@@ -1,7 +1,7 @@
 import * as sqlite3 from "sqlite3";
 import * as path from "path";
 
-export class Database implements Database.IDatabase {
+export class Database implements Database.DatabaseIntf {
 
   protected _db: sqlite3.Database;
 

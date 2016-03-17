@@ -1,5 +1,5 @@
 import {Request, Router, Response} from "express";
-import {ApiMethod, GenericApi} from "./generic-api";
+import {ApiMethod, GenericApi} from "./GenericApi";
 
 
 export class FundsApi extends GenericApi {

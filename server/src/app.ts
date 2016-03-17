@@ -8,8 +8,8 @@ import * as errorHandler from "errorhandler";
 import * as path from "path";
 //import * as process from "process"; DOESN'T YET WORK, no typings
 let process = require("process");
-import * as routes from "./routes";
-import {ApiManager} from "./api-manager";
+import * as routes from "./Routes";
+import {ApiManager} from "./ApiManager";
 
 var app = express();
 

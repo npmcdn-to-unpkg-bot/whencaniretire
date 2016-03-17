@@ -1,11 +1,11 @@
-import {Request, Router} from "express";
-import {Database} from "./db"
+import {Request, Router, RequestHandler} from "express";
+import {Database} from "./Database"
 
 export enum ApiMethod {
-  get,
-  post,
-  delete,
-  put
+  GET,
+  POST,
+  DELETE,
+  PUT
 }
 
 module Apis {
@@ -27,9 +27,23 @@ export abstract class GenericApi {
     this._apis = [];
   }
 
+  private mapMethod = (m: ApiMethod): Function => {
+    switch(m){
+      case ApiMethod.GET:
+        return this._router.get;
+      case ApiMethod.POST:
+        return this._router.post;
+      case ApiMethod.DELETE:
+        return this._router.delete;
+      case ApiMethod.PUT:
+        return this._router.put;
+    }
+  }
+
   protected setupApis(){
     this._apis.forEach((api, idx, arr) => {
-      this._router[api.method](api.uri, this.wrapError(api.handler));
+      this.mapMethod(api.method)(api.uri, this.wrapError(api.handler));
+      //this._router[api.method](api.uri, this.wrapError(api.handler));
     });
   }
 
