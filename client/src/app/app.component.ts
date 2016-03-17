@@ -1,14 +1,17 @@
 import {Component} from "angular2/core";
 import {Router, RouteConfig, RouteDefinition, ROUTER_DIRECTIVES} from "angular2/router";
 import {AppConfig} from "./app.configuration";
+import {Modal} from "angular2-modal";
 
 @Component({
   selector: "wcir-app",
   templateUrl: "/partials/app",
-  directives: [ROUTER_DIRECTIVES]
+  directives: [ROUTER_DIRECTIVES],
+  providers: [Modal]
 })
 @RouteConfig(AppConfig.routes)
 export class AppComponent {
+
 
   constructor(private _router: Router){
   }
@@ -21,9 +24,10 @@ export class AppComponent {
 
   public title: string = "When can I retire?";
 
-  trackRouteByPath(index: number, route: RouteDefinition): string {
+  public trackRouteByPath(index: number, route: RouteDefinition): string {
     return route.path;
   }
+
 
 
 }

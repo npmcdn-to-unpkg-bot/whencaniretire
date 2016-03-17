@@ -2,10 +2,15 @@ System.config({
   "packages": {
     "app": {
       "defaultExtension": "js"
+    },
+    "angular2-modal": {
+      "defaultExtension": "js",
+      "main": "index.js"
     }
   },
   "map": {
-    "app": "assets/js/client/app"
+    "app": "assets/js/client/app",
+    "angular2-modal": "assets/js/lib/angular2-modal"
   }
 });
 
