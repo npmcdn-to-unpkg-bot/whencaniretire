@@ -2,7 +2,7 @@ declare module Express {
 
   interface Request {
 
-    database: Database.IDatabase;
+    database: Database.DatabaseIntf;
 
   }
 
