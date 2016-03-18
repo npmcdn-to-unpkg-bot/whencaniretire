@@ -4,7 +4,6 @@ import * as del from "del";
 import * as path from "path";
 import * as ts from "gulp-typescript";
 import * as nodemon from "gulp-nodemon";
-import * as plumber from "gulp-plumber";
 import * as sass from "gulp-sass";
 import * as flatten from "gulp-flatten";
 
@@ -133,7 +132,7 @@ export class Gulpfile {
 
   @Task("buildServer")
   buildServer(){
-    let tsProject = ts.createProject(path.resolve("./server/tsconfig.json"));
+    let tsProject = ts.createProject(path.resolve("./build-tools/server-tsconfig.json"));
 
     return gulp
       .src(Gulpfile.getSrc(Gulpfile.config.server))
