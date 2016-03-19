@@ -2,15 +2,12 @@
   "ambientDependencies": {
     "body-parser": "registry:dt/body-parser#0.0.0+20160112113357",
     "errorhandler": "registry:dt/errorhandler#0.0.0+20151218184913",
-    "es6-shim": "registry:dt/es6-shim#0.31.2+20160317120654",
     "express": "registry:dt/express#4.0.0+20160208031452",
     "express-serve-static-core": "registry:dt/express-serve-static-core#0.0.0+20160218233549",
-    "jasmine": "registry:dt/jasmine#2.2.0+20160308082659",
     "mime": "registry:dt/mime#0.0.0+20151204023458",
     "morgan": "registry:dt/morgan#1.2.2+20160104041339",
     "node": "registry:dt/node#4.0.0+20160226132328",
     "serve-static": "registry:dt/serve-static#0.0.0+20160218233549",
-    "sqlite3": "registry:dt/sqlite3#2.2.3+20160224211008",
-    "systemjs": "registry:dt/systemjs#0.18.4+20150723174523"
+    "sqlite3": "registry:dt/sqlite3#2.2.3+20160224211008"
   }
 }

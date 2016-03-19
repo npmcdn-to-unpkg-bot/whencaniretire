@@ -27,7 +27,7 @@ export class Gulpfile {
       baseDir: "./server",
       src: [
         "src/**/*.ts",
-        "typings/main.d.ts"
+        "../build-tools/server/typings/main.d.ts"
       ],
       dest: "",
       watchTasks: ["buildServer"]
@@ -36,7 +36,7 @@ export class Gulpfile {
       baseDir: "./client",
       src: [
         "src/**/*.ts",
-        "../build-tools/typings/browser.d.ts"
+        "../build-tools/client/typings/browser.d.ts"
       ],
       dest: "assets/js/client",
       watchTasks: ["buildClient"]
