@@ -155,7 +155,6 @@ export class Gulpfile {
   @Task("buildAngular2Modal")
   buildAnguarModal(){
     let tsProject = ts.createProject(path.resolve("./build-tools/client-tsconfig.json"));
-    console.log(Gulpfile.getSrc(Gulpfile.config.angular2Modal));
 
     return gulp
       .src(Gulpfile.getSrc(Gulpfile.config.angular2Modal))
