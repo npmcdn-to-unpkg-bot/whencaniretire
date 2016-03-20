@@ -19,6 +19,7 @@ export class ApiManager extends GenericApi {
   constructor(){
     super();
 
+    //Path is relative to project root
     this._database = new Database("./wcir.db");
     this._fundsApi = new FundsApi();
 

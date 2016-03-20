@@ -27,12 +27,6 @@ export abstract class GenericApi {
     this._apis = [];
   }
 
-  protected setupApis(){
-    this._apis.forEach((api, idx, arr) => {
-      api.method.apply(this._router, [api.uri, this.wrapError(api.handler.bind(this))]);
-    });
-  }
-
 
   public get router(): Router {
     return this._router;
@@ -43,12 +37,25 @@ export abstract class GenericApi {
     this._router = r;
   }
 
-  protected wrapError = (fn: RequestHandler) => ErrorRequestHandler => {
-    return (req: Request, res: Response, next: NextFunction) => {
+  protected setupApis(): void {
+
+    this._apis.forEach((api, idx, val) => {
+
+      api.method.apply(this._router, [api.uri, this.wrapError(api.handler.bind(this))]);
+
+    });
+  }
+  /*protected wrapError = (fn: RequestHandler) => RequestHandler => {
+    return (req: Request, res: Response, next: NextFunction):RequestHandler => {
       fn(req, res, next).catch(next);
     };
-  }
+  }*/
 
+  protected wrapError = (fn: RequestHandler):RequestHandler => {
+    return (req: Request, res: Response, next: NextFunction) => {
+      fn(req, res, next).catch(next);
+    }
+  }
 };
 
 

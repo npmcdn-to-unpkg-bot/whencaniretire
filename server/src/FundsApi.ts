@@ -1,4 +1,4 @@
-import {Request, Router, Response} from "express";
+import {Request, Router, Response, RequestHandler, ErrorRequestHandler,NextFunction} from "express";
 import {ApiMethod, GenericApi} from "./GenericApi";
 
 
