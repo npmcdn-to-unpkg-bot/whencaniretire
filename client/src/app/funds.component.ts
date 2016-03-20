@@ -38,6 +38,10 @@ export class FundsComponent {
   addFund(): void {
 
   }
+
+  public trackFundBySymbol(index: number, fund: any): string {
+    return fund.symbol;
+  }
 };
 
 

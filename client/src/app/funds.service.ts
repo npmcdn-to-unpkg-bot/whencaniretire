@@ -1,5 +1,6 @@
 import {Injectable} from "angular2/core";
 import {Http} from "angular2/http";
+import "rxjs/operator/add/map";
 
 interface Fund {
   symbol: string,
@@ -14,16 +15,17 @@ export class FundsService {
 
   private _funds = [{symbol: "ANEFX", name: "American Funds The New Economy Fund® Class A"}];
 
-  public get funds(): any{
+  public get funds(): any {
 
     console.log("in funds getter");
-    this.getAll();
-    return this._funds;
+    return this.getAll();
   }
 
 
 
-  public getAll(): any{
+  public getAll(): any {
+
+    return this._http.get("/api/funds").map(res => res.json());
 
     /*this._http.get("/api/funds")
       .map(res => res.json())
