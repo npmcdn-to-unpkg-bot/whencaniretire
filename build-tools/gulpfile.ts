@@ -5,8 +5,7 @@ import * as path from "path";
 import * as ts from "gulp-typescript";
 import * as nodemon from "gulp-nodemon";
 import * as sass from "gulp-sass";
-import * as flatten from "gulp-flatten";
-
+import * as gulpTypings from "gulp-typings";
 
 @Gulpclass()
 export class Gulpfile {
@@ -45,7 +44,7 @@ export class Gulpfile {
       baseDir: "./",
       src: [
         "node_modules/angular2-modal/src/components/angular2-modal/**/*.ts",
-        "build-tools/typings/browser.d.ts"
+        "build-tools/angular2Modal/typings/browser.d.ts"
       ],
       dest: "assets/js/lib/angular2-modal",
       watchTasks: []
@@ -132,7 +131,7 @@ export class Gulpfile {
 
   @Task("buildServer")
   buildServer(){
-    let tsProject = ts.createProject(path.resolve("./build-tools/server-tsconfig.json"));
+    let tsProject = ts.createProject(path.resolve("./build-tools/server/tsconfig.json"));
 
     return gulp
       .src(Gulpfile.getSrc(Gulpfile.config.server))
@@ -143,7 +142,7 @@ export class Gulpfile {
 
   @Task("buildClient")
   buildClient(){
-    let tsProject = ts.createProject(path.resolve("./build-tools/client-tsconfig.json"));
+    let tsProject = ts.createProject(path.resolve("./build-tools/client/tsconfig.json"));
 
     return gulp
       .src(Gulpfile.getSrc(Gulpfile.config.client))
@@ -154,7 +153,7 @@ export class Gulpfile {
 
   @Task("buildAngular2Modal")
   buildAnguarModal(){
-    let tsProject = ts.createProject(path.resolve("./build-tools/client-tsconfig.json"));
+    let tsProject = ts.createProject(path.resolve("./build-tools/client/tsconfig.json"));
 
     return gulp
       .src(Gulpfile.getSrc(Gulpfile.config.angular2Modal))
@@ -178,6 +177,31 @@ export class Gulpfile {
       .pipe(sass())
       .pipe(gulp.dest(path.resolve("./dist", Gulpfile.config.css.dest)));
   }
+
+  @Task("installTypings", ["installClientTypings", "installServerTypings", "installAngular2ModalTypings"])
+  installTypings(){
+    return;
+  }
+
+  @Task("installClientTypings")
+  installClientTypings(){
+    return gulp
+      .src("./build-tools/client/typings.json")
+      .pipe(gulpTypings());
+  }
+
+  @Task("installServerTypings")
+  installServerTypings(){
+    return gulp
+      .src("./build-tools/server/typings.json")
+      .pipe(gulpTypings());
+  }
+
+  @Task("installAngular2ModalTypings")
+  installAngular2ModalTypings(){
+    return gulp
+      .src("./build-tools/angular2Modal/typings.json")
+      .pipe(gulpTypings());
 
   @SequenceTask()
   default(){
