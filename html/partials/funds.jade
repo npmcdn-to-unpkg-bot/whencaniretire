@@ -3,8 +3,8 @@ table.table.table-striped.table-hover
     tr
       th Symbol
       th Name
-      th Actions {{ _funds | async | json }}
-  //tbody(template="ngFor #fund of _funds; trackBy:trackFundBySymbol")
+      th Actions
+  tbody(template="ngFor #fund of _funds; trackBy:trackFundBySymbol")
     tr
       td {{fund.symbol}}
       td {{fund.name}}
