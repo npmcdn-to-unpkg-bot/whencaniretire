@@ -6,8 +6,9 @@ import {Observable} from "rxjs/Observable";
 import {Observer} from "rxjs/Observer"
 
 interface Fund {
-  symbol: string,
-  name: string
+  id: number;
+  symbol: string;
+  name: string;
 };
 
 interface Datastore {
@@ -27,11 +28,6 @@ export class FundsService {
       funds: []
     };
   }
-
-  /*public get funds(): any {
-
-    console.log("in funds getter");
-  }*/
 
   public get funds$(): Observable<Fund[]> {
 

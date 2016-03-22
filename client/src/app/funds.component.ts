@@ -5,6 +5,7 @@ import {Modal, ModalConfig, ModalDialogInstance, YesNoModal, YesNoModalContent, 
 import {Observable} from "rxjs/Observable";
 
 interface Fund {
+  id: number;
   symbol: string;
   name: string;
 };
@@ -48,8 +49,8 @@ export class FundsComponent implements OnInit {
 
   }
 
-  public trackFundBySymbol(index: number, fund: any): string {
-    return fund.symbol;
+  public trackFundById(index: number, fund: Fund): number {
+    return fund.id;
   }
 };
 

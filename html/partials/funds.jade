@@ -7,11 +7,11 @@ form(method="POST")
         th Actions
     tbody(template="ngFor #fund of funds; trackBy:trackFundBySymbol")
       tr
-        td
-          span(template="ngIf:editingFund!=fund.symbol") {{fund.symbol}}
+        td {{fund.id}}
+          span.nonEditing(template="ngIf:editingFund!=fund.symbol") {{fund.symbol}}
           input.form-control(template="ngIf:editingFund==fund.symbol", bindon-ngModel="fund.symbol")
         td
-          span(template="ngIf:editingFund!=fund.symbol") {{fund.symbol}}
+          span.nonEditing(template="ngIf:editingFund!=fund.symbol") {{fund.name}}
           input.form-control(template="ngIf:editingFund==fund.symbol", bindon-ngModel="fund.name")
         td
           button.btn.btn-primary(type="button", on-click="editingFund = fund.symbol") Edit

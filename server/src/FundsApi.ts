@@ -9,10 +9,10 @@ export class FundsApi extends GenericApi {
 
     this._apis = [
       {method: this._router.get, uri: "/", handler: this.getAll},
-      {method: this._router.get, uri: "/:symbol", handler: this.getOne},
+      {method: this._router.get, uri: "/:id", handler: this.getOne},
       {method: this._router.post, uri: "/", handler: this.createOne},
-      {method: this._router.put, uri: "/:symbol", handler: this.updateOne},
-      {method: this._router.delete, uri: "/:symbol", handler: this.deleteOne}
+      {method: this._router.put, uri: "/:rowid", handler: this.updateOne},
+      {method: this._router.delete, uri: "/:id", handler: this.deleteOne}
     ];
 
     this.setupApis();
@@ -20,32 +20,33 @@ export class FundsApi extends GenericApi {
   }
 
   public async getAll(req: Request, res: Response, next: Function): Promise<void> {
-    res.send(await req.database.all("select * from funds"));
+    res.send(await req.database.all("select rowid as id,symbol,name from funds"));
   }
 
   public async getOne(req: Request, res: Response, next: Function): Promise<void> {
-    res.send(await req.database.all("select * from funds where symbol=$symbol", {
-      $symbol: req.params.symbol
+    res.send(await req.database.all("select * from funds where rowid=$id", {
+      $id: req.params.id
     }));
   }
 
   public async createOne(req: Request, res: Response, next: Function): Promise<void> {
     res.send(await req.database.run("insert into funds(symbol, name) values ($symbol, $name)", {
       $name: req.body.name,
-      $symbol: req.params.symbol
+      $symbol: req.body.symbol
     }));
   }
 
   public async deleteOne(req: Request, res: Response, next: Function): Promise<void> {
-    res.send(await req.database.run("delete from funds where symbol=$symbol", {
+    res.send(await req.database.run("delete from funds where rowid=$id", {
       $symbol: req.params.symbol
     }));
   }
 
   public async updateOne(req: Request, res: Response, next: Function): Promise<void> {
-    res.send(await req.database.run("update funds set name=$name where symbol=$symbol", {
+    res.send(await req.database.run("update funds set symbol=$symbol,name=$name where rowid=$id", {
       $name: req.body.name,
-      $symbol: req.params.symbol
+      $symbol: req.body.symbol,
+      $id: req.params.id
     }));
   }
 
