@@ -5,23 +5,25 @@ form(method="POST")
         th Symbol
         th Name
         th Actions
-    tbody(template="ngFor #fund of funds; trackBy:trackFundById")
-      tr(template="ngIf:editingFund!=fund.id")
-        td
-          span.non-editing-control {{fund.symbol}}
-        td
-          span.non-editing-control {{fund.name}}
-        td
-          button.btn.btn-primary(type="button", on-click="editFund(fund)") Edit
-          button.btn.btn-danger(type="button", on-click="deleteFund(fund.symbol)") Delete
-      tr(template="ngIf:editingFund==fund.id")
-        td
-          input.form-control(bindon-ngModel="fund.symbol")
-        td
-          input.form-control(bindon-ngModel="fund.name")
-        td
-          button.btn.btn-success(type="submit", on-click="saveFund(fund)") Save
-          button.btn.btn-danger(type="button", on-click="editingFund=-1") Cancel
+    tbody
+      tr(template="ngFor #fund of funds; trackBy:trackFundById")
+        //(template="ngIf:editingFund!=fund.id")
+        template(bind-ngIf="editingFund!=fund.id")
+          td
+            span.non-editing-control {{fund.symbol}}
+          td
+            span.non-editing-control {{fund.name}}
+          td
+            button.btn.btn-primary(type="button", on-click="editFund(fund)") Edit
+            button.btn.btn-danger(type="button", on-click="deleteFund(fund.symbol)") Delete
+        template(bind-ngIf="editingFund==fund.id")
+          td {{fund.id}} {{editingFund}}
+            input.form-control(bindon-ngModel="fund.symbol")
+          td
+            input.form-control(bindon-ngModel="fund.name")
+          td
+            button.btn.btn-success(type="submit", on-click="saveFund(fund)") Save
+            button.btn.btn-danger(type="button", on-click="editingFund=-1") Cancel
     tfoot
       tr
         td
