@@ -5,16 +5,16 @@ form(method="POST")
         th Symbol
         th Name
         th Actions
-    tbody(template="ngFor #fund of funds; trackBy:trackFundBySymbol")
+    tbody(template="ngFor #fund of funds; trackBy:trackFundById")
       tr
         td {{fund.id}}
-          span.nonEditing(template="ngIf:editingFund!=fund.symbol") {{fund.symbol}}
-          input.form-control(template="ngIf:editingFund==fund.symbol", bindon-ngModel="fund.symbol")
+          span.nonEditing(template="ngIf:editingFund!=fund.id") {{fund.symbol}}
+          input.form-control(template="ngIf:editingFund==fund.id", bindon-ngModel="fund.symbol")
         td
-          span.nonEditing(template="ngIf:editingFund!=fund.symbol") {{fund.name}}
-          input.form-control(template="ngIf:editingFund==fund.symbol", bindon-ngModel="fund.name")
+          span.nonEditing(template="ngIf:editingFund!=fund.id") {{fund.name}}
+          input.form-control(template="ngIf:editingFund==fund.id", bindon-ngModel="fund.name")
         td
-          button.btn.btn-primary(type="button", on-click="editingFund = fund.symbol") Edit
+          button.btn.btn-primary(type="button", on-click="editFund(fund)") Edit
           button.btn.btn-danger(type="button", on-click="deleteFund(fund.symbol)") Delete
     tfoot
       tr

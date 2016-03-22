@@ -19,10 +19,10 @@ export class FundsComponent implements OnInit {
   public dialog: Promise<ModalDialogInstance>;
   public funds: Fund[];
   private fundsObserver: Observable<Fund[]>
-  private editingFund: string;
+  private editingFund: number;
 
   constructor(private fundsService: FundsService, private modal: Modal){
-    this.editingFund = "";
+    this.editingFund = -1;
   }
 
   public ngOnInit(){
@@ -31,7 +31,7 @@ export class FundsComponent implements OnInit {
 
   }
 
-  editFund(symbol: string): void {
+  /*editFund(symbol: string): void {
     console.log(symbol);
     let bindings = Injector.resolve([
       provide(ICustomModal, {useValue: new YesNoModalContent(" bla bla bla", "msg msg msg", true)})
@@ -39,7 +39,7 @@ export class FundsComponent implements OnInit {
 
     this.modal.open(<any>YesNoModal, bindings);
 
-  }
+  }*/
 
   deleteFund(symbol: string): void {
 
@@ -47,6 +47,10 @@ export class FundsComponent implements OnInit {
 
   addFund(): void {
 
+  }
+
+  public editFund(f:Fund): void {
+    this.editingFund = f.id;
   }
 
   public trackFundById(index: number, fund: Fund): number {
