@@ -1,19 +1,24 @@
-table.table.table-striped.table-hover
-  thead
-    tr
-      th Symbol
-      th Name
-      th Actions
-  tbody(template="ngFor #fund of _funds; trackBy:trackFundBySymbol")
-    tr
-      td {{fund.symbol}}
-      td {{fund.name}}
-      td
-        button.btn.btn-primary(type="button", on-click="editFund(fund.symbol)") Edit
-        button.btn.btn-danger(type="button", on-click="deleteFund(fund.symbol)") Delete
-  tfoot
-    tr
-      td
-      td
-      td
-        button.btn.btn-success(type="button", on-click="addFund()") Add
+form(method="POST")
+  table.table.table-striped.table-hover
+    thead
+      tr
+        th Symbol
+        th Name
+        th Actions
+    tbody(template="ngFor #fund of funds; trackBy:trackFundBySymbol")
+      tr
+        td
+          span(template="ngIf:editingFund!=fund.symbol") {{fund.symbol}}
+          input.form-control(template="ngIf:editingFund==fund.symbol", bindon-ngModel="fund.symbol")
+        td
+          span(template="ngIf:editingFund!=fund.symbol") {{fund.symbol}}
+          input.form-control(template="ngIf:editingFund==fund.symbol", bindon-ngModel="fund.name")
+        td
+          button.btn.btn-primary(type="button", on-click="editingFund = fund.symbol") Edit
+          button.btn.btn-danger(type="button", on-click="deleteFund(fund.symbol)") Delete
+    tfoot
+      tr
+        td
+        td
+        td
+          button.btn.btn-success(type="button", on-click="addFund()") Add

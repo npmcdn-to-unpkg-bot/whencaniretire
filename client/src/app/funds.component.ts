@@ -15,16 +15,18 @@ interface Fund {
 })
 export class FundsComponent implements OnInit {
 
-  public _dialog: Promise<ModalDialogInstance>;
-  public _funds: Fund[];
-  private _fundsObserver: Observable<Fund[]>
+  public dialog: Promise<ModalDialogInstance>;
+  public funds: Fund[];
+  private fundsObserver: Observable<Fund[]>
+  private editingFund: string;
 
-  constructor(private _fundsService: FundsService, private _modal: Modal){
+  constructor(private fundsService: FundsService, private modal: Modal){
+    this.editingFund = "";
   }
 
   public ngOnInit(){
-    this._fundsService.funds$.subscribe(updatedFunds => this._funds = updatedFunds);
-    this._fundsService.getAll();
+    this.fundsService.funds$.subscribe(updatedFunds => this.funds = updatedFunds);
+    this.fundsService.getAll();
 
   }
 
@@ -34,7 +36,7 @@ export class FundsComponent implements OnInit {
       provide(ICustomModal, {useValue: new YesNoModalContent(" bla bla bla", "msg msg msg", true)})
     ]);
 
-    this._modal.open(<any>YesNoModal, bindings);
+    this.modal.open(<any>YesNoModal, bindings);
 
   }
 
