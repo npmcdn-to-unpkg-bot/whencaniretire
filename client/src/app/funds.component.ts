@@ -20,6 +20,7 @@ export class FundsComponent implements OnInit {
   public funds: Fund[];
   private fundsObserver: Observable<Fund[]>
   private editingFund: number;
+  private newFund: Fund;
 
   constructor(private fundsService: FundsService, private modal: Modal){
     this.editingFund = -1;
@@ -28,29 +29,37 @@ export class FundsComponent implements OnInit {
   public ngOnInit(){
     this.fundsService.funds$.subscribe(updatedFunds => this.funds = updatedFunds);
     this.fundsService.getAll();
+    this.newFund = new Fund();
 
   }
-
-  /*editFund(symbol: string): void {
-    console.log(symbol);
-    let bindings = Injector.resolve([
-      provide(ICustomModal, {useValue: new YesNoModalContent(" bla bla bla", "msg msg msg", true)})
-    ]);
-
-    this.modal.open(<any>YesNoModal, bindings);
-
-  }*/
 
   deleteFund(symbol: string): void {
 
   }
 
-  addFund(): void {
+  public add(): void {
 
   }
 
-  public editFund(f:Fund): void {
+  public update(f:Fund): void {
+
+  }
+
+  public edit(f:Fund): void {
     this.editingFund = f.id;
+  }
+
+  public cancelEditing(f:Fund): void {
+    this.editingFund = -1;
+  }
+
+  public isEditing(f:Fund): boolean {
+    return f.id == this.editingFund;
+  }
+
+  public clearNew(): void {
+    this.newFund.symbol = "";
+    this.newFund.name = "";
   }
 
   public trackFundById(index: number, fund: Fund): number {

@@ -7,26 +7,28 @@ form(method="POST")
         th Actions
     tbody
       tr(template="ngFor #fund of funds; trackBy:trackFundById")
-        //(template="ngIf:editingFund!=fund.id")
-        template(bind-ngIf="editingFund!=fund.id")
+        template(bind-ngIf="!isEditing(fund)")
           td
             span.non-editing-control {{fund.symbol}}
           td
             span.non-editing-control {{fund.name}}
           td
-            button.btn.btn-primary(type="button", on-click="editFund(fund)") Edit
-            button.btn.btn-danger(type="button", on-click="deleteFund(fund.symbol)") Delete
-        template(bind-ngIf="editingFund==fund.id")
-          td {{fund.id}} {{editingFund}}
+            button.btn.btn-primary(type="button", on-click="edit(fund)") Edit
+            button.btn.btn-danger(type="button", on-click="delete(fund.symbol)") Delete
+        template(bind-ngIf="isEditing(fund)")
+          td
             input.form-control(bindon-ngModel="fund.symbol")
           td
             input.form-control(bindon-ngModel="fund.name")
           td
-            button.btn.btn-success(type="submit", on-click="saveFund(fund)") Save
-            button.btn.btn-danger(type="button", on-click="editingFund=-1") Cancel
+            button.btn.btn-success(type="submit", on-click="update(fund)") Save
+            button.btn.btn-danger(type="button", on-click="cancelEditing()") Cancel
     tfoot
-      tr
+      tr(bindon-fund="newFund")
         td
+          input.form-control(bindon-ngModel="fund.symbol")
         td
+          input.form-control(bindon-ngModel="fund.name")
         td
-          button.btn.btn-primary(type="button", on-click="addFund()") Add
+          button.btn.btn-success(type="submit", on-click="create(fund)") Add
+          button.btn.btn-danger(type="button", on-click="clearNew()") Clear
