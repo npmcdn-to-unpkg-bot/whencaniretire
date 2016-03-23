@@ -4,10 +4,14 @@ import {FundsService} from "./funds.service";
 import {Modal, ModalConfig, ModalDialogInstance, YesNoModal, YesNoModalContent, ICustomModal} from "angular2-modal";
 import {Observable} from "rxjs/Observable";
 
-interface Fund {
-  id: number;
-  symbol: string;
-  name: string;
+class Fund {
+
+  public id: number;
+  public symbol: string;
+  public name: string;
+
+  constructor(){
+  }
 };
 
 @Component({
@@ -42,6 +46,14 @@ export class FundsComponent implements OnInit {
   }
 
   public update(f:Fund): void {
+
+  }
+
+  public create(): void {
+
+    console.log(this.newFund);
+    console.log("in create");
+    this.fundsService.create(this.newFund);
 
   }
 

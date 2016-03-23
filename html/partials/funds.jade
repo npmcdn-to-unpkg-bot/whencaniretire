@@ -24,11 +24,13 @@ form(method="POST")
             button.btn.btn-success(type="submit", on-click="update(fund)") Save
             button.btn.btn-danger(type="button", on-click="cancelEditing()") Cancel
     tfoot
-      tr(bindon-fund="newFund")
+      tr
         td
-          input.form-control(bindon-ngModel="fund.symbol")
+          input.form-control(bindon-ngModel="newFund.symbol")
         td
-          input.form-control(bindon-ngModel="fund.name")
+          input.form-control(bindon-ngModel="newFund.name")
         td
-          button.btn.btn-success(type="submit", on-click="create(fund)") Add
+          button.btn.btn-success(type="submit", on-click="create()") Add
           button.btn.btn-danger(type="button", on-click="clearNew()") Clear
+
+| {{newFund | json }}
