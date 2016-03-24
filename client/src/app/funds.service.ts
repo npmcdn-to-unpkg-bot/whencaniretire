@@ -1,5 +1,5 @@
 import {Injectable} from "angular2/core";
-import {Http, Headers} from "angular2/http";
+import {Http, Headers, RequestOptions} from "angular2/http";
 import "rxjs/add/operator/map";
 import "rxjs/add/operator/share";
 import {Observable} from "rxjs/Observable";
@@ -28,9 +28,12 @@ export class FundsService {
     this._dataStore = {
       funds: []
     };
-    this.commonHeaders = new Headers({
-      "Content-Type": "application/json"
+    this.commonOptions = new RequestOptions({
+      headers: new Headers({
+        "Content-Type": "application/json"
+      })
     });
+
   }
 
   public get funds$(): Observable<Fund[]> {
@@ -56,36 +59,22 @@ export class FundsService {
   }
 
   public create(f:Fund): void {
-    console.log(f);
-    console.log(JSON.stringify(f));
-
-    this._http.post("/api/funds", JSON.stringify(f), {
-      headers: this.commonHeaders
-    })
+    this._http.post("/api/funds", JSON.stringify(f), this.commonOptions)
       .map(res => res.json())
       .subscribe(data => {
-        console.log("resp " + data);
         this.getAll();
       }, error => {
         console.log("err " + error);
       });
-
   }
 
   public deleteFund(f:Fund): void {
-
-    this._http.delete("/api/funds/" + f.id, {
-      headers: this.commonHeaders
-    })
+    this._http.delete("/api/funds/" + f.id, this.commonOptions)
       .map(res => res.json())
       .subscribe(data => {
-        console.log("resp " + data);
         this.getAll();
       }, error => {
-        console.log("err " + error);
       });
-
-
   }
 
 };

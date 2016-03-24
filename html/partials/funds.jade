@@ -9,7 +9,7 @@ form(method="POST")
       tr(template="ngFor #fund of funds; trackBy:trackFundById")
         template(bind-ngIf="!isEditing(fund)")
           td
-            span.non-editing-control {{fund.symbol}} - {{fund.id}}
+            span.non-editing-control {{fund.symbol}}
           td
             span.non-editing-control {{fund.name}}
           td
@@ -26,7 +26,7 @@ form(method="POST")
     tfoot
       tr
         td
-          input.form-control(bindon-ngModel="newFund.symbol")
+          input.form-control(bindon-ngModel="newFund.symbol", on-ngModelChange="newFund.symbol = newFund.symbol.toUpperCase()")
         td
           input.form-control(bindon-ngModel="newFund.name")
         td

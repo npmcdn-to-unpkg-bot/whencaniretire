@@ -30,7 +30,6 @@ export class FundsApi extends GenericApi {
   }
 
   public async createOne(req: Request, res: Response, next: Function): Promise<void> {
-    console.log(req.body);
     res.send(await req.database.run("insert into funds(symbol, name) values ($symbol, $name)", {
       $name: req.body.name,
       $symbol: req.body.symbol

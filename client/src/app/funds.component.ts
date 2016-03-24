@@ -11,6 +11,8 @@ class Fund {
   public name: string;
 
   constructor(){
+    this.name = "";
+    this.symbol = "";
   }
 };
 
@@ -33,20 +35,17 @@ export class FundsComponent implements OnInit {
   public ngOnInit(){
     this.fundsService.funds$.subscribe(updatedFunds => this.funds = updatedFunds);
     this.fundsService.getAll();
-    this.newFund = new Fund();
+    this.clearNew();
 
   }
 
   public update(f:Fund): void {
-
+    this.fundsService.updateFund(f);
   }
 
   public create(): void {
-
-    console.log(this.newFund);
-    console.log("in create");
     this.fundsService.create(this.newFund);
-
+    this.clearNew();
   }
 
   public edit(f:Fund): void {
@@ -62,8 +61,7 @@ export class FundsComponent implements OnInit {
   }
 
   public clearNew(): void {
-    this.newFund.symbol = "";
-    this.newFund.name = "";
+    this.newFund = new Fund();
   }
 
   public deleteFund(f:Fund): void {
