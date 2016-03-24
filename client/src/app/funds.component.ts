@@ -37,14 +37,6 @@ export class FundsComponent implements OnInit {
 
   }
 
-  deleteFund(symbol: string): void {
-
-  }
-
-  public add(): void {
-
-  }
-
   public update(f:Fund): void {
 
   }
@@ -72,6 +64,10 @@ export class FundsComponent implements OnInit {
   public clearNew(): void {
     this.newFund.symbol = "";
     this.newFund.name = "";
+  }
+
+  public deleteFund(f:Fund): void {
+    this.fundsService.deleteFund(f);
   }
 
   public trackFundById(index: number, fund: Fund): number {

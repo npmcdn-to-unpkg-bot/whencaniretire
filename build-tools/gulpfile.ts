@@ -75,7 +75,8 @@ export class Gulpfile {
       },
       script: path.resolve("./dist/app.js"),
       watch: path.resolve("./dist"),
-      ext: "js jade"
+      ext: "js jade",
+      delay: 2
     };
 
     return nodemon(nodemonSettings).on("restart", ()=> {

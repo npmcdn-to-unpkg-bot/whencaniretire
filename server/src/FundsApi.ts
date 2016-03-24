@@ -11,7 +11,7 @@ export class FundsApi extends GenericApi {
       {method: this._router.get, uri: "/", handler: this.getAll},
       {method: this._router.get, uri: "/:id", handler: this.getOne},
       {method: this._router.post, uri: "/", handler: this.createOne},
-      {method: this._router.put, uri: "/:rowid", handler: this.updateOne},
+      {method: this._router.put, uri: "/:id", handler: this.updateOne},
       {method: this._router.delete, uri: "/:id", handler: this.deleteOne}
     ];
 
@@ -39,7 +39,7 @@ export class FundsApi extends GenericApi {
 
   public async deleteOne(req: Request, res: Response, next: Function): Promise<void> {
     res.send(await req.database.run("delete from funds where rowid=$id", {
-      $symbol: req.params.symbol
+      $id: req.params.id
     }));
   }
 
