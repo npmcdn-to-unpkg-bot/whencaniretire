@@ -1,4 +1,4 @@
-import {Request, Router, Response, RequestHandler, ErrorRequestHandler,NextFuncti QQ  on} from "express";
+import {Request, Router, Response, RequestHandler, ErrorRequestHandler,NextFunction} from "express";
 import {ApiMethod, GenericApi} from "./GenericApi";
 
 
@@ -30,6 +30,7 @@ export class FundsApi extends GenericApi {
   }
 
   public async createOne(req: Request, res: Response, next: Function): Promise<void> {
+    console.log(req.body);
     res.send(await req.database.run("insert into funds(symbol, name) values ($symbol, $name)", {
       $name: req.body.name,
       $symbol: req.body.symbol

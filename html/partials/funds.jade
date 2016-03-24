@@ -9,7 +9,7 @@ form(method="POST")
       tr(template="ngFor #fund of funds; trackBy:trackFundById")
         template(bind-ngIf="!isEditing(fund)")
           td
-            span.non-editing-control {{fund.symbol}}
+            span.non-editing-control {{fund.symbol}} - {{fund.id}}
           td
             span.non-editing-control {{fund.name}}
           td

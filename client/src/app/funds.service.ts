@@ -53,11 +53,13 @@ export class FundsService {
 
   public create(f:Fund): void {
     console.log(f);
+    console.log(JSON.stringify(f));
 
     this._http.post("/api/funds", JSON.stringify(f))
       .map(res => res.json())
       .subscribe(data => {
         console.log(data);
+        this.getAll();
       }, error => {
         console.log(error);
       });
