@@ -2,14 +2,6 @@ import {Request, Response, Router} from "express";
 import {FundsApi} from "./FundsApi"
 import {ApiMethod, GenericApi} from "./GenericApi"
 import {Database} from "./Database";
-/*
-declare module Express {
-  interface Request {
-
-    database: Database;
-  }
-}
-*/
 
 export class ApiManager extends GenericApi {
 
@@ -21,7 +13,7 @@ export class ApiManager extends GenericApi {
 
     //Path is relative to project root
     this._database = new Database("./wcir.db");
-    this._fundsApi = new FundsApi();
+    this._fundsApi = new FundsApi(this._database);
 
     this.router.use(this.databaseInjector);
 
