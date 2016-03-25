@@ -25,7 +25,7 @@ export class FundsApi extends GenericApi {
 
     this.model = new DatabaseModel(db, "funds");
     this.dbConfig.forEach(cfg => {
-      this.model.addField(new DatabaseField(cfg));
+      this.model.addField(cfg)
     });
 
 
@@ -52,16 +52,11 @@ export class FundsApi extends GenericApi {
   }
 
   public async createOne(req: Request, res: Response, next: Function): Promise<void> {
-    res.send(await req.database.run("insert into funds(symbol, name) values ($symbol, $name)", {
-      $name: req.body.name,
-      $symbol: req.body.symbol
-    }));
+    res.send(await this.model.insert(req.body));
   }
 
   public async deleteOne(req: Request, res: Response, next: Function): Promise<void> {
-    res.send(await req.database.run("delete from funds where rowid=$id", {
-      $id: req.params.id
-    }));
+    res.send(await this.model.delete(req.params));
   }
 
   public async updateOne(req: Request, res: Response, next: Function): Promise<void> {

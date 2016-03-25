@@ -102,8 +102,8 @@ export class DatabaseField implements DatabaseFieldIntf {
     return true;
   }
 
-  public select(includeAlias: boolean = true): string {
-    return this.name + (includeAlias ? : (" as " + this.alias) : "");
+  public select(): string {
+    return this.name + " AS " + this.alias;
   }
 
   public insert(): string {
@@ -125,41 +125,71 @@ export class DatabaseField implements DatabaseFieldIntf {
 
 export class DatabaseModel {
 
-  private fields: DatabaseField[];
+  private fields: any;
   private table: string;
   private db: Database;
 
   constructor(database: Database, table: string){
 
-    this.fields = [];
     this.db = database;
     this.table = table;
+    this.fields = {};
 
   }
 
-  public addField(f: DatabaseField): void {
-    this.fields.push(f);
+  public addField(f: DatabaseFieldIntf): void {
+    let dbf = new DatabaseField(f);
+    this.fields[dbf.alias] = dbf;
   }
 
-  private getFieldList(includeAlias: boolean = true): string {
-    return this.fields.map(f => f.select()).join(",");
+  private getSelectList(): string {
+    return Object.keys(this.fields).map(f => this.fields[f].select()).join(",");
   }
 
   private getSortList(): string {
-    return this.fields.map(f => f.sortClause()).filter(f => (f !== null)).join(",");
+    return Object.keys(this.fields).map(f => this.fields[f].sortClause()).filter(f => (f !== null)).join(",");
   }
 
-  private select(where?: any): string {
+  public async insert(values: any): Promise<any> {
+    let fieldList = [];
+    let tokenList = [];
+    let valueList = {};
+
+    for(var f in values){
+      if(f in this.fields && !this.fields[f].primaryKey){
+        fieldList.push(this.fields[f].name);
+        tokenList.push("$"+this.fields[f].name);
+        valueList["$"+this.fields[f].name] = values[f];
+      }
+    }
+
+    return await this.db.run("INSERT INTO " + this.table + "(" + fieldList.join(",") + ") VALUES (" + tokenList.join(",") + ")", valueList);
+  }
+
+  public async delete(criteria: any): Promise<any> {
+
+    var clauseList = [];
+    var valueList = {};
+
+    for(var f in criteria){
+      if(f in this.fields){
+        clauseList.push(this.fields[f].name + " = $" + this.fields[f].name);
+        valueList["$"+this.fields[f].name] = criteria[f];
+      }
+    }
+
+    console.log("DELETE FROM " + this.table + " WHERE " + clauseList.join(" AND "));
+    console.log(valueList);
+    return await this.db.run("DELETE FROM " + this.table + " WHERE " + clauseList.join(" AND "), valueList);
+
+  }
+
+
+  private getSelectStatement(where?: any): string {
 
     let whereClause = (where.length > 0 ? (" WHERE " + where.map(w => w.field + " = $" + w.field).join(" AND ")) : "");
 
-    return "SELECT " + this.getFieldList() + " FROM " + this.table + whereClause + " ORDER BY " + this.getSortList();
-
-  }
-
-  public insert(values: any): string {
-
-    return "INSERT INTO " + this.table + "(" + this.getFieldList(false) + ") VALUES ("
+    return "SELECT " + this.getSelectList() + " FROM " + this.table + whereClause + " ORDER BY " + this.getSortList();
 
   }
 
@@ -169,9 +199,10 @@ export class DatabaseModel {
     for(var prop in where){
       whereValueList["$" + prop] = where[prop];
     }
-    return await this.db.all(this.select(where), whereValueList);
+    return await this.db.all(this.getSelectStatement(where), whereValueList);
 
-  };
+  }
+
 
 
 
