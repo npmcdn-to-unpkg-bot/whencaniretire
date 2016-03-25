@@ -25,7 +25,7 @@ export class Gulpfile {
     server: {
       baseDir: "./server",
       src: [
-        "src/**/*.ts",
+        "**/*.ts",
         "../build-tools/server/typings/main.d.ts"
       ],
       dest: "",
@@ -34,7 +34,7 @@ export class Gulpfile {
     client: {
       baseDir: "./client",
       src: [
-        "src/**/*.ts",
+        "**/*.ts",
         "../build-tools/client/typings/browser.d.ts"
       ],
       dest: "assets/js/client",
@@ -67,7 +67,8 @@ export class Gulpfile {
   run(){
   }
 
-  @Task("app", ["buildServer", "buildHtml", "buildClient", "buildAngular2Modal", "buildCss"])
+  //@Task("app", ["buildServer", "buildHtml", "buildClient", "buildAngular2Modal", "buildCss"])
+  @Task("app", ["buildServer", "buildHtml", "buildClient", "buildCss"])
   app(){
     let nodemonSettings = {
       execMap: {
