@@ -21,7 +21,7 @@ export class FundsService {
   private _dataStore: Datastore;
   private _fundsObserver: Observer<Fund[]>;
   private _funds$: Observable<Fund[]>;
-  private commonHeaders: Headers;
+  private commonOptions: RequestOptions;
 
   constructor(private _http: Http){
     this._funds$ = new Observable(observer => this._fundsObserver = observer).share();

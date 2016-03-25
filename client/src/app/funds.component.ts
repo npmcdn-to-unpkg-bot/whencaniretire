@@ -1,7 +1,7 @@
 import {Component, Injector, provide, OnInit} from "angular2/core";
 import {RouteConfig} from "angular2/router";
 import {FundsService} from "./funds.service";
-import {Modal, ModalConfig, ModalDialogInstance, YesNoModal, YesNoModalContent, ICustomModal} from "angular2-modal";
+//import {Modal, ModalConfig, ModalDialogInstance, YesNoModal, YesNoModalContent, ICustomModal} from "angular2-modal";
 import {Observable} from "rxjs/Observable";
 
 class Fund {
@@ -22,13 +22,12 @@ class Fund {
 })
 export class FundsComponent implements OnInit {
 
-  public dialog: Promise<ModalDialogInstance>;
   public funds: Fund[];
   private fundsObserver: Observable<Fund[]>
   private editingFund: number;
   private newFund: Fund;
 
-  constructor(private fundsService: FundsService, private modal: Modal){
+  constructor(private fundsService: FundsService){
   }
 
   public ngOnInit(){
@@ -53,7 +52,7 @@ export class FundsComponent implements OnInit {
     this.editingFund = f.id;
   }
 
-  public cancelEditing(f:Fund): void {
+  public cancelEditing(): void {
     this.editingFund = -1;
   }
 
