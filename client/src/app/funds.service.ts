@@ -77,4 +77,14 @@ export class FundsService {
       });
   }
 
+  public updateFund(f:Fund): void {
+    this._http.put("/api/funds/" + f.id, JSON.stringify(f), this.commonOptions)
+      .map(res => res.json())
+      .subscribe(data => {
+        this.getAll();
+      }, error => {
+        console.log("err " + error);
+      });
+  }
+
 };

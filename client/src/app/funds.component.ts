@@ -29,18 +29,19 @@ export class FundsComponent implements OnInit {
   private newFund: Fund;
 
   constructor(private fundsService: FundsService, private modal: Modal){
-    this.editingFund = -1;
   }
 
   public ngOnInit(){
     this.fundsService.funds$.subscribe(updatedFunds => this.funds = updatedFunds);
     this.fundsService.getAll();
     this.clearNew();
+    this.cancelEditing();
 
   }
 
   public update(f:Fund): void {
     this.fundsService.updateFund(f);
+    this.cancelEditing();
   }
 
   public create(): void {
