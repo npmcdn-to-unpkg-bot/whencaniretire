@@ -94,14 +94,18 @@ export class DatabaseModel {
 
   }
 
-  public getAll(where?: any[]): Promise<any> {
+  public async getAll(where?: any[]) {
     if(where === undefined) where = [];
     let whereValueList = {};
     where.forEach(v => {
       whereValueList["$" + v.field] = v.value;
     });
+    console.log("where values");
     console.log(whereValueList);
-    return this.db.all(this.select(where), whereValueList);
+    let data = await this.db.all(this.select(where), whereValueList);
+    console.log("data is ");
+    console.log(data);
+    return data;
   };
 
 
@@ -111,25 +115,27 @@ export class DatabaseModel {
 export class FundsApi extends GenericApi {
 
   private model: DatabaseModel;
+  private dbConfig: DatabaseFieldIntf[] = [{
+      name: "rowid",
+      alias: "id",
+      primaryKey: true
+    },{
+      name: "symbol",
+      sort: SortDirection.Ascending,
+      mandatory: true
+    },{
+      name: "name",
+      mandatory: true
+    }];
+
 
   constructor(db: Database){
     super();
 
     this.model = new DatabaseModel(db, "funds");
-    this.model.addField(new DatabaseField({
-      name: "rowid",
-      alias: "id",
-      primaryKey: true
-    }));
-    this.model.addField(new DatabaseField({
-      name: "symbol",
-      sort: SortDirection.Ascending,
-      mandatory: true
-    }));
-    this.model.addField(new DatabaseField({
-      name: "name",
-      mandatory: true
-    }));
+    this.dbConfig.forEach(cfg => {
+      this.model.addField(new DatabaseField(cfg));
+    });
 
 
     this._apis = [
@@ -144,7 +150,7 @@ export class FundsApi extends GenericApi {
 
   }
 
-  public async getAll(req: Request, res: Response, next: Function): Promise<void> {
+  public async getAll(req: Request, res: Response, next: Function) {
     res.send(await this.model.getAll());
   }
 

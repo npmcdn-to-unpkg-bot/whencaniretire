@@ -7,7 +7,6 @@ export class Database implements Database.DatabaseIntf {
 
   constructor(filename: string){
 
-    console.log(path.resolve(filename));
     this._db = new sqlite3.Database(path.resolve(filename));
 
   }
