@@ -16,6 +16,8 @@ export class Database implements Database.DatabaseIntf {
   // No data is returned.
   run(sql: string, params?: any): Promise<any> {
 
+    console.log(sql);
+    console.log(params);
     return new Promise((resolve, reject) => {
 
       this._db.run(sql, params, (err) => {
@@ -166,6 +168,37 @@ export class DatabaseModel {
     return await this.db.run("INSERT INTO " + this.table + "(" + fieldList.join(",") + ") VALUES (" + tokenList.join(",") + ")", valueList);
   }
 
+  public async update(values: any, criteria: any): Promise<any> {
+
+    let updateList = [];
+    let whereClause = [];
+    let valueList = {};
+
+    for(var f in values){
+      if(f in this.fields && !this.fields[f].primaryKey){
+        updateList.push(this.fields[f].name + " = $" + this.fields[f].name);
+        valueList["$"+this.fields[f].name] = values[f];
+      }
+    }
+
+    for(var f in criteria){
+      if(f in this.fields){
+        whereClause.push(this.fields[f].name + " = $" + this.fields[f].name);
+        valueList["$"+this.fields[f].name] = criteria[f];
+      }
+    }
+
+    let whereStmt = whereClause.length > 0 ? " WHERE " + whereClause.join(" AND ") : "";
+
+    if(updateList.length > 0){
+      return this.db.run("UPDATE " + this.table + " SET " + updateList.join(", ") + whereStmt, valueList)
+    }
+    else {
+      return {};
+    }
+
+  }
+
   public async delete(criteria: any): Promise<any> {
 
     var clauseList = [];
@@ -178,8 +211,6 @@ export class DatabaseModel {
       }
     }
 
-    console.log("DELETE FROM " + this.table + " WHERE " + clauseList.join(" AND "));
-    console.log(valueList);
     return await this.db.run("DELETE FROM " + this.table + " WHERE " + clauseList.join(" AND "), valueList);
 
   }

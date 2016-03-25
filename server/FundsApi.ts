@@ -46,9 +46,7 @@ export class FundsApi extends GenericApi {
   }
 
   public async getOne(req: Request, res: Response, next: Function): Promise<void> {
-    res.send(await this.model.getAll({
-      id: req.params.id
-    }));
+    res.send(await this.model.getAll(req.params));
   }
 
   public async createOne(req: Request, res: Response, next: Function): Promise<void> {
@@ -60,11 +58,7 @@ export class FundsApi extends GenericApi {
   }
 
   public async updateOne(req: Request, res: Response, next: Function): Promise<void> {
-    res.send(await req.database.run("UPDATE funds SET symbol=$symbol,name=$name WHERE rowid=$id", {
-      $name: req.body.name,
-      $symbol: req.body.symbol,
-      $id: req.params.id
-    }));
+    res.send(await this.model.update(req.body, req.params));
   }
 
 };
