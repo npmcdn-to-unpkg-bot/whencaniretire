@@ -47,10 +47,9 @@ export abstract class GenericApi {
   }
 
   protected wrapError = (fn: RequestHandler):RequestHandler => {
-    //return (req: Request, res: Response, next: NextFunction) => {
-    //  fn(req, res, next).catch(next);
-    //}
-    return fn;
+    return (req: Request, res: Response, next: NextFunction) => {
+      fn(req, res, next).catch(next);
+    }
   }
 };
 

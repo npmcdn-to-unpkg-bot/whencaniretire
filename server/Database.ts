@@ -102,8 +102,8 @@ export class DatabaseField implements DatabaseFieldIntf {
     return true;
   }
 
-  public select(): string {
-    return this.name + " as " + this.alias;
+  public select(includeAlias: boolean = true): string {
+    return this.name + (includeAlias ? : (" as " + this.alias) : "");
   }
 
   public insert(): string {
@@ -125,7 +125,7 @@ export class DatabaseField implements DatabaseFieldIntf {
 
 export class DatabaseModel {
 
-  public fields: DatabaseField[];
+  private fields: DatabaseField[];
   private table: string;
   private db: Database;
 
@@ -141,13 +141,25 @@ export class DatabaseModel {
     this.fields.push(f);
   }
 
-  public select(where?: any): string {
+  private getFieldList(includeAlias: boolean = true): string {
+    return this.fields.map(f => f.select()).join(",");
+  }
 
-    let selectList = this.fields.map(f => f.select()).join(",");
+  private getSortList(): string {
+    return this.fields.map(f => f.sortClause()).filter(f => (f !== null)).join(",");
+  }
+
+  private select(where?: any): string {
+
     let whereClause = (where.length > 0 ? (" WHERE " + where.map(w => w.field + " = $" + w.field).join(" AND ")) : "");
-    let sortList = this.fields.map(f => f.sortClause()).filter(f => (f !== null)).join(",");
 
-    return "SELECT " + selectList + " FROM " + this.table + whereClause + " ORDER BY " + sortList;
+    return "SELECT " + this.getFieldList() + " FROM " + this.table + whereClause + " ORDER BY " + this.getSortList();
+
+  }
+
+  public insert(values: any): string {
+
+    return "INSERT INTO " + this.table + "(" + this.getFieldList(false) + ") VALUES ("
 
   }
 
