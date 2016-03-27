@@ -218,9 +218,15 @@ export class DatabaseModel {
 
   private getSelectStatement(where?: any): string {
 
-    let whereClause = (where.length > 0 ? (" WHERE " + where.map(w => w.field + " = $" + w.field).join(" AND ")) : "");
+    let whereFields: string[] = [];
+    for(var f in where){
+      whereFields.push(this.fields[f].name + " = $" + this.fields[f].name);
+    }
+    let whereClause = (whereFields.length > 0 ? (" WHERE " + whereFields.join(" AND ")) : "");
+    let orderByList = this.getSortList();
+    let orderByClause = (orderByList.length > 0 ? (" ORDER BY " + orderByList) : "");
 
-    return "SELECT " + this.getSelectList() + " FROM " + this.table + whereClause + " ORDER BY " + this.getSortList();
+    return "SELECT " + this.getSelectList() + " FROM " + this.table + whereClause + orderByClause;
 
   }
 
@@ -228,8 +234,9 @@ export class DatabaseModel {
     if(where === undefined) where = {};
     let whereValueList = {};
     for(var prop in where){
-      whereValueList["$" + prop] = where[prop];
+      whereValueList["$" + this.fields[prop].name] = where[prop];
     }
+    if(where === undefined) where = {};
     return await this.db.all(this.getSelectStatement(where), whereValueList);
 
   }
