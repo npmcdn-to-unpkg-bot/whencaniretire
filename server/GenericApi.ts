@@ -1,30 +1,36 @@
 import {Request, Response, NextFunction, Router, IRouterMatcher, RequestHandler, ErrorRequestHandler} from "express";
-import {Database} from "./Database"
+import {DatabaseModel} from "./Database";
 
-export enum ApiMethod {
+enum ApiMethod {
   GET,
   POST,
   DELETE,
   PUT
-}
+};
 
-module Apis {
-
-  export interface IApi {
-    method: IRouterMatcher<Router>;
-    uri: string;
-    handler: RequestHandler;
-  };
-}
+interface ApiIntf {
+  method: IRouterMatcher<Router>;
+  uri: string;
+  handler: RequestHandler;
+};
 
 export abstract class GenericApi {
 
-  protected _router: Router;
-  protected _apis: Apis.IApi[];
+  protected model: DatabaseModel;
+  private _router: Router;
+  private _apis: ApiIntf[];
 
   constructor(){
     this._router = Router();
-    this._apis = [];
+    this._apis = [
+      {method: this._router.get, uri: "/", handler: this.getAll},
+      {method: this._router.get, uri: "/:id", handler: this.getOne},
+      {method: this._router.post, uri: "/", handler: this.createOne},
+      {method: this._router.put, uri: "/:id", handler: this.updateOne},
+      {method: this._router.delete, uri: "/:id", handler: this.deleteOne}
+    ];
+
+    this.setupApis();
   }
 
 

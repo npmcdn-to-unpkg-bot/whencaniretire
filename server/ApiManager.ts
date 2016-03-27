@@ -1,6 +1,6 @@
 import {Request, Response, Router} from "express";
 import {FundsApi} from "./FundsApi"
-import {ApiMethod, GenericApi} from "./GenericApi"
+import {GenericApi} from "./GenericApi"
 import {Database} from "./Database";
 
 export class ApiManager extends GenericApi {
