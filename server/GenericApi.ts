@@ -1,5 +1,5 @@
 import {Request, Response, NextFunction, Router, IRouterMatcher, RequestHandler, ErrorRequestHandler} from "express";
-import {DatabaseModel} from "./Database";
+import {Database, DatabaseModel, DatabaseFieldIntf} from "./Database";
 
 enum ApiMethod {
   GET,
@@ -14,14 +14,19 @@ interface ApiIntf {
   handler: RequestHandler;
 };
 
-export abstract class GenericApi {
+export class GenericApi {
 
   protected model: DatabaseModel;
   private _router: Router;
   private _apis: ApiIntf[];
+  //private db: Database;
 
-  constructor(){
+  constructor(db: Database, table: string, config: DatabaseFieldIntf[]){
     this._router = Router();
+    this.model = new DatabaseModel(db, table);
+    config.forEach(cfg => {
+      this.model.addField(cfg);
+    });
     this._apis = [
       {method: this._router.get, uri: "/", handler: this.getAll},
       {method: this._router.get, uri: "/:id", handler: this.getOne},
@@ -63,6 +68,7 @@ export abstract class GenericApi {
   }
 
   public async getOne(req: Request, res: Response, next: Function): Promise<void> {
+    console.log(req.params);
     res.send(await this.model.getAll(req.params));
   }
 

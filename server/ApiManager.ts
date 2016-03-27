@@ -1,34 +1,63 @@
 import {Request, Response, Router} from "express";
-import {FundsApi} from "./FundsApi"
-import {GenericApi} from "./GenericApi"
-import {Database} from "./Database";
+import {GenericApi} from "./GenericApi";
+import {Database, SortDirection} from "./Database";
 
-export class ApiManager extends GenericApi {
+export class ApiManager {
 
-  private _fundsApi: FundsApi;
+  private fundsApi: GenericApi;
+  private accountsApi: GenericApi;
   private _database: Database;
+  public router: Router;
 
   constructor(){
-    super();
+
+    this.router = Router();
 
     //Path is relative to project root
     this._database = new Database("./wcir.db");
-    this._fundsApi = new FundsApi(this._database);
+    //this._fundsApi = new FundsApi(this._database);
 
-    this.router.use(this.databaseInjector);
-
-    this.router.use("/funds", this._fundsApi.router);
+    this.setupFundsApi();
+    this.setupAccountsApi();
 
     this.router.use(this.errorHandler);
 
-  };
+  }
 
-  private databaseInjector = (req: Request, res: Response, next: Function) => {
+  private setupFundsApi(): void {
 
-    req.database = this._database;
+    this.fundsApi = new GenericApi(this._database, "funds", [{
+        name: "rowid",
+        alias: "id",
+        primaryKey: true
+      },{
+        name: "fund_symbol",
+        sort: SortDirection.Ascending,
+        mandatory: true
+      },{
+        name: "fund_name",
+        mandatory: true
+      }
+    ]);
 
-    next();
-  };
+    this.router.use("/funds", this.fundsApi.router);
+  }
+
+  private setupAccountsApi(): void {
+
+    this.accountsApi = new GenericApi(this._database, "accounts", [{
+        name: "rowid",
+        alias: "id",
+        primaryKey: true
+      },{
+        name: "account_name",
+        mandatory: true
+      }
+    ]);
+
+    this.router.use("/accounts", this.accountsApi.router);
+
+  }
 
   private errorHandler = (err: any, req: Request, res: Response, next: Function) => {
 
