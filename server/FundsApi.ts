@@ -41,24 +41,5 @@ export class FundsApi extends GenericApi {
 
   }
 
-  public async getAll(req: Request, res: Response, next: Function) {
-    res.send(await this.model.getAll());
-  }
-
-  public async getOne(req: Request, res: Response, next: Function): Promise<void> {
-    res.send(await this.model.getAll(req.params));
-  }
-
-  public async createOne(req: Request, res: Response, next: Function): Promise<void> {
-    res.send(await this.model.insert(req.body));
-  }
-
-  public async deleteOne(req: Request, res: Response, next: Function): Promise<void> {
-    res.send(await this.model.delete(req.params));
-  }
-
-  public async updateOne(req: Request, res: Response, next: Function): Promise<void> {
-    res.send(await this.model.update(req.body, req.params));
-  }
 
 };
