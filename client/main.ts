@@ -3,14 +3,13 @@ System.config({
     "app": {
       "defaultExtension": "js"
     },
-    "angular2-modal": {
-      "defaultExtension": "js",
-      "main": "index.js"
+    "falcor": {
+      "main": "falcor.browser.min.js"
     }
   },
   "map": {
     "app": "assets/js/client/app",
-    "angular2-modal": "assets/js/lib/angular2-modal"
+    "falcor": "https://cdnjs.cloudflare.com/ajax/libs/falcor/0.1.15/"
   }
 });
 
