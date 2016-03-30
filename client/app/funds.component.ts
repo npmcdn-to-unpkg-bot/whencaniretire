@@ -7,12 +7,12 @@ import {Observable} from "rxjs/Observable";
 class Fund {
 
   public id: number;
-  public symbol: string;
-  public name: string;
+  public fund_symbol: string;
+  public fund_name: string;
 
   constructor(){
-    this.name = "";
-    this.symbol = "";
+    this.fund_name = "";
+    this.fund_symbol = "";
   }
 };
 
