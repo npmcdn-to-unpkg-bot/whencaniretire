@@ -9,26 +9,26 @@ form(method="POST")
       tr(template="ngFor #fund of funds; trackBy:trackFundById")
         template(bind-ngIf="!isEditing(fund)")
           td
-            span.non-editing-control {{fund.symbol}}
+            span.non-editing-control {{fund.fund_symbol}}
           td
-            span.non-editing-control {{fund.name}}
+            span.non-editing-control {{fund.fund_name}}
           td
             button.btn.btn-primary(type="button", on-click="edit(fund)") Edit
             button.btn.btn-danger(type="button", on-click="deleteFund(fund)") Delete
         template(bind-ngIf="isEditing(fund)")
           td
-            input.form-control(bindon-ngModel="fund.symbol")
+            input.form-control(bindon-ngModel="fund.fund_symbol")
           td
-            input.form-control(bindon-ngModel="fund.name")
+            input.form-control(bindon-ngModel="fund.fund_name")
           td
             button.btn.btn-success(type="submit", on-click="update(fund)") Save
             button.btn.btn-danger(type="button", on-click="cancelEditing()") Cancel
     tfoot
       tr
         td
-          input.form-control(bindon-ngModel="newFund.symbol", on-ngModelChange="newFund.symbol = newFund.symbol.toUpperCase()")
+          input.form-control(bindon-ngModel="newFund.fund_symbol", on-ngModelChange="newFund.fund_symbol = newFund.fund_symbol.toUpperCase()")
         td
-          input.form-control(bindon-ngModel="newFund.name")
+          input.form-control(bindon-ngModel="newFund.fund_name")
         td
           button.btn.btn-success(type="submit", on-click="create()") Add
           button.btn.btn-danger(type="button", on-click="clearNew()") Clear
