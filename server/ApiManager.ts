@@ -1,6 +1,45 @@
 import {Request, Response, Router} from "express";
 import {GenericApi} from "./GenericApi";
 import {Database, SortDirection} from "./Database";
+//import {Model} from "falcor";
+let falcor = require("falcor");
+let falcorExpress = require("falcor-express");
+let FalcorRouter = require("falcor-router");
+
+class FundsRouter {
+
+  // A falcor router, not an Express router
+  public router: any;
+
+  constructor(){
+
+    this.router = new FalcorRouter([{
+      route: "funds[{integers:fundIds}].symbol",
+      get: this.get
+    }]);
+    console.log("in funds router");
+    console.log(this.router);
+
+  }
+
+  private get = (pathSet: any): Promise<any> => {
+
+    console.log(pathSet);
+    return new Promise((resolve, reject) => {
+      let results = [];
+
+      results.push({
+        path: ["funds", "1", "symbol"],
+        value: "ANEFX"
+      });
+
+      resolve(results);
+
+    });
+
+  }
+
+}
 
 export class ApiManager {
 
@@ -8,6 +47,8 @@ export class ApiManager {
   private accountsApi: GenericApi;
   private _database: Database;
   public router: Router;
+  private model: any;
+  private falcorRouter: any;
 
   constructor(){
 
@@ -19,10 +60,36 @@ export class ApiManager {
 
     this.setupFundsApi();
     this.setupAccountsApi();
+    this.setupFalcor();
 
     this.router.use(this.errorHandler);
 
   }
+
+  private setupFalcor(): void {
+
+    this.model = new falcor.Model({
+      /*cache: {
+          funds: {
+          "1": {
+            "symbol": "ANEFX",
+            "name": "American Funds The New Economy Fund® Class A"
+          },
+          "2": {
+            "symbol": "ANCFX",
+            "name": "American Funds Fundamental Investors® Class A"
+          }
+        }
+      }*/
+    });
+    this.falcorRouter = new FundsRouter();
+
+    this.router.use("/model", falcorExpress.dataSourceRoute((req, res) => {
+      return this.falcorRouter.router;
+    }));
+
+  }
+
 
   private setupFundsApi(): void {
 
