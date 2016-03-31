@@ -5,6 +5,7 @@ import {Database, SortDirection} from "./Database";
 let falcor = require("falcor");
 let falcorExpress = require("falcor-express");
 let FalcorRouter = require("falcor-router");
+let PouchDB = require("pouchdb");
 
 class FundsRouter {
 
@@ -15,7 +16,8 @@ class FundsRouter {
 
     this.router = new FalcorRouter([{
       route: "funds[{integers:fundIds}].symbol",
-      get: this.get
+      get: this.get,
+      set: this.set
     }]);
     console.log("in funds router");
     console.log(this.router);
@@ -37,7 +39,21 @@ class FundsRouter {
 
     });
 
-  }
+  };
+
+  private set = (jsonGraphArg: any): Promise<any> => {
+
+    let fundKeys = Object.keys(jsonGraphArg.fundIds);
+
+    return new Promise((resolve, reject) => {
+
+      console.log(jsonGraphArg);
+      reject(null);
+
+    });
+
+
+  };
 
 }
 
