@@ -5,6 +5,7 @@ import "rxjs/add/operator/share";
 import {Observable} from "rxjs/Observable";
 import {Observer} from "rxjs/Observer";
 import * as falcor from "falcor";
+import {UuidService} from "UuidService";
 
 interface Fund {
   id: number;
@@ -25,7 +26,7 @@ export class FundsService {
   private commonOptions: RequestOptions;
   private model;
 
-  constructor(private _http: Http){
+  constructor(private _http: Http, private uuidService: Uuid Service){
     this._funds$ = new Observable(observer => this._fundsObserver = observer).share();
     this._dataStore = {
       funds: []
@@ -54,6 +55,7 @@ export class FundsService {
     this.model.get(["funds", 1, "symbol"]).then(val => {
       console.log(val);
     });
+    console.log(this.uuidService.get());
 
     this._http
       .get("/api/funds")

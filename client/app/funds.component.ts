@@ -1,7 +1,6 @@
 import {Component, Injector, provide, OnInit} from "angular2/core";
 import {RouteConfig} from "angular2/router";
 import {FundsService} from "./funds.service";
-import {UuidService} from "./UuidService";
 //import {Modal, ModalConfig, ModalDialogInstance, YesNoModal, YesNoModalContent, ICustomModal} from "angular2-modal";
 import {Observable} from "rxjs/Observable";
 
@@ -28,7 +27,7 @@ export class FundsComponent implements OnInit {
   private editingFund: number;
   private newFund: Fund;
 
-  constructor(private fundsService: FundsService, private uuidService: UuidService){
+  constructor(private fundsService: FundsService){
   }
 
   public ngOnInit(){
@@ -38,7 +37,6 @@ export class FundsComponent implements OnInit {
     this.fundsService.getAll();
     this.clearNew();
     this.cancelEditing();
-    console.log(this.uuidService.get());
 
   }
 
