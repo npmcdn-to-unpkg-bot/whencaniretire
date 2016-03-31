@@ -3,10 +3,12 @@ import {bootstrap} from "angular2/platform/browser";
 import {ROUTER_PROVIDERS} from "angular2/router";
 import {HTTP_PROVIDERS} from "angular2/http";
 import {AppComponent} from "./app.component";
-import {FundsService} from "./funds.service"
+import {FundsService} from "./funds.service";
+import {UuidService} from "./UuidService";
 
 bootstrap(AppComponent, [
   ROUTER_PROVIDERS,
   HTTP_PROVIDERS,
-  FundsService
+  FundsService,
+  UuidService
 ]);

@@ -3,12 +3,13 @@ import {Http, Headers, RequestOptions} from "angular2/http";
 import "rxjs/add/operator/map";
 import "rxjs/add/operator/share";
 import {Observable} from "rxjs/Observable";
-import {Observer} from "rxjs/Observer"
+import {Observer} from "rxjs/Observer";
+import * as falcor from "falcor";
 
 interface Fund {
   id: number;
-  symbol: string;
-  name: string;
+  fund_symbol: string;
+  fund_name: string;
 };
 
 interface Datastore {
@@ -22,6 +23,7 @@ export class FundsService {
   private _fundsObserver: Observer<Fund[]>;
   private _funds$: Observable<Fund[]>;
   private commonOptions: RequestOptions;
+  private model;
 
   constructor(private _http: Http){
     this._funds$ = new Observable(observer => this._fundsObserver = observer).share();
@@ -32,6 +34,9 @@ export class FundsService {
       headers: new Headers({
         "Content-Type": "application/json"
       })
+    });
+    this.model = new falcor.Model({
+      source: new falcor.HttpDataSource("/api/model")
     });
 
   }
@@ -45,6 +50,10 @@ export class FundsService {
 
 
   public getAll(): void {
+
+    this.model.get(["funds", 1, "symbol"]).then(val => {
+      console.log(val);
+    });
 
     this._http
       .get("/api/funds")
