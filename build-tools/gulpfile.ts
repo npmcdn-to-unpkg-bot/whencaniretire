@@ -40,15 +40,6 @@ export class Gulpfile {
       dest: "assets/js/client",
       watchTasks: ["buildClient"]
     },
-    angular2Modal: {
-      baseDir: "./",
-      src: [
-        "node_modules/angular2-modal/src/components/angular2-modal/**/*.ts",
-        "build-tools/angular2Modal/typings/browser.d.ts"
-      ],
-      dest: "assets/js/lib/angular2-modal",
-      watchTasks: []
-    },
     html: {
       baseDir: "./html",
       src: ["**/*.jade"],
@@ -180,7 +171,8 @@ export class Gulpfile {
       .pipe(gulp.dest(path.resolve("./dist", Gulpfile.config.css.dest)));
   }
 
-  @Task("installTypings", ["installClientTypings", "installServerTypings", "installAngular2ModalTypings"])
+  //@Task("installTypings", ["installClientTypings", "installServerTypings", "installAngular2ModalTypings"])
+  @Task("installTypings", ["installClientTypings", "installServerTypings"])
   installTypings(){
     return;
   }
