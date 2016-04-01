@@ -19,6 +19,9 @@ app.set("views", path.resolve(__dirname, "views"));
 app.set("view engine", "jade");
 app.use(morgan("dev"));
 app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({
+  extended: true
+}));
 app.use("/assets", express.static(path.resolve(__dirname, "assets")));
 
 
