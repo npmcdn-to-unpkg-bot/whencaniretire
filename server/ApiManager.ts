@@ -14,13 +14,25 @@ class FundsRouter {
 
   constructor(){
 
-    this.router = new FalcorRouter([{
-      route: "funds[{integers:fundIds}].symbol",
-      get: this.get,
-      set: this.set
+    /*this.router = new FalcorRouter([{
+      route: "funds[{keys:fundIds}].symbol",
+      get: this.get
+    },{
+      route: ["funds", ["{keys:fundIds}"], "symbol"],
+      set: () => { console.log( "asdf set set set ") }
     }]);
-    console.log("in funds router");
-    console.log(this.router);
+   */
+    this.router = new FalcorRouter([{
+      route: ["funds","{keys:fundIds}", "symbol"],
+      set: (jg) => {
+        console.log("in set");
+        console.log(jg);
+        return [{
+          path: ["funds", "symbol"],
+          value: "ANEFX"
+        }];
+      }
+    }]);
 
   }
 
@@ -43,12 +55,14 @@ class FundsRouter {
 
   private set = (jsonGraphArg: any): Promise<any> => {
 
+    console.log("in set");
+    console.log(jsonGraphArg);
     let fundKeys = Object.keys(jsonGraphArg.fundIds);
 
     return new Promise((resolve, reject) => {
 
       console.log(jsonGraphArg);
-      reject(null);
+      console.log(null);
 
     });
 
@@ -84,20 +98,7 @@ export class ApiManager {
 
   private setupFalcor(): void {
 
-    this.model = new falcor.Model({
-      /*cache: {
-          funds: {
-          "1": {
-            "symbol": "ANEFX",
-            "name": "American Funds The New Economy Fund® Class A"
-          },
-          "2": {
-            "symbol": "ANCFX",
-            "name": "American Funds Fundamental Investors® Class A"
-          }
-        }
-      }*/
-    });
+    this.model = new falcor.Model({});
     this.falcorRouter = new FundsRouter();
 
     this.router.use("/model", falcorExpress.dataSourceRoute((req, res) => {
