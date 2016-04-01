@@ -53,22 +53,15 @@ export class FundsService {
   public getAll(): void {
 
     let uuid = this.uuidService.get();
-    let jsonGraphFragment = {
-      funds: {
-      }
-    };
-    jsonGraphFragment.funds[uuid] = {
-      symbol: "ANCFX"
-    };
     this.model.set({
-      paths: [
-        ["funds", uuid, "symbol"]
-      ],
-      jsonGraph: jsonGraphFragment
+      path: ["funds", uuid, "symbol"],
+      value: 5
     }).then((jsonEnvelope) => {
+      console.log("post handler");
       console.log(jsonEnvelope);
       console.log(JSON.stringify(jsonEnvelope, null, 4));
     }).catch((x) => {
+      console.log("error handler");
       console.error(x);
     });
 

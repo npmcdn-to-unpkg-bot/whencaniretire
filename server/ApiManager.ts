@@ -14,23 +14,19 @@ class FundsRouter {
 
   constructor(){
 
-    /*this.router = new FalcorRouter([{
-      route: "funds[{keys:fundIds}].symbol",
-      get: this.get
-    },{
-      route: ["funds", ["{keys:fundIds}"], "symbol"],
-      set: () => { console.log( "asdf set set set ") }
-    }]);
-   */
-    this.router = new FalcorRouter([{
-      route: ["funds","{keys:fundIds}", "symbol"],
-      set: (jg) => {
+    this.router = FalcorRouter.createClass([{
+      route: ["funds", FalcorRouter.keys, "symbol"],
+      set: (jsonGraphArg) => {
+
         console.log("in set");
-        console.log(jg);
-        return [{
-          path: ["funds", "symbol"],
-          value: "ANEFX"
+        console.log(jsonGraphArg);
+
+        let data = [{
+          path: ["funds", Object.keys(jsonGraphArg.funds)[0], "symbol"],
+          value: Math.floor(Math.random()*5)
         }];
+        console.log(data);
+        return data;
       }
     }]);
 
@@ -55,7 +51,7 @@ class FundsRouter {
 
   private set = (jsonGraphArg: any): Promise<any> => {
 
-    console.log("in set");
+    console.log("in bottom set");
     console.log(jsonGraphArg);
     let fundKeys = Object.keys(jsonGraphArg.fundIds);
 
@@ -77,8 +73,8 @@ export class ApiManager {
   private accountsApi: GenericApi;
   private _database: Database;
   public router: Router;
-  private model: any;
-  private falcorRouter: any;
+  //private model: any;
+  private falcorRouter: FundsRouter;
 
   constructor(){
 
@@ -98,11 +94,11 @@ export class ApiManager {
 
   private setupFalcor(): void {
 
-    this.model = new falcor.Model({});
+    //this.model = new falcor.Model({});
     this.falcorRouter = new FundsRouter();
 
     this.router.use("/model", falcorExpress.dataSourceRoute((req, res) => {
-      return this.falcorRouter.router;
+      return new this.falcorRouter.router();
     }));
 
   }
