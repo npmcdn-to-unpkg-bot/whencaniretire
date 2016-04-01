@@ -5,7 +5,7 @@ import "rxjs/add/operator/share";
 import {Observable} from "rxjs/Observable";
 import {Observer} from "rxjs/Observer";
 import * as falcor from "falcor";
-import {UuidService} from "UuidService";
+import {UuidService} from "./UuidService";
 
 interface Fund {
   id: number;
@@ -26,7 +26,7 @@ export class FundsService {
   private commonOptions: RequestOptions;
   private model;
 
-  constructor(private _http: Http, private uuidService: Uuid Service){
+  constructor(private _http: Http, private uuidService: UuidService){
     this._funds$ = new Observable(observer => this._fundsObserver = observer).share();
     this._dataStore = {
       funds: []
@@ -52,10 +52,25 @@ export class FundsService {
 
   public getAll(): void {
 
-    this.model.get(["funds", 1, "symbol"]).then(val => {
-      console.log(val);
+    let uuid = this.uuidService.get();
+    let jsonGraphFragment = {
+      funds: {
+      }
+    };
+    jsonGraphFragment.funds[uuid] = {
+      symbol: "ANCFX"
+    };
+    this.model.set({
+      paths: [
+        ["funds", uuid, "symbol"]
+      ],
+      jsonGraph: jsonGraphFragment
+    }).then((jsonEnvelope) => {
+      console.log(jsonEnvelope);
+      console.log(JSON.stringify(jsonEnvelope, null, 4));
+    }).catch((x) => {
+      console.error(x);
     });
-    console.log(this.uuidService.get());
 
     this._http
       .get("/api/funds")
