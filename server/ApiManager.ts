@@ -7,10 +7,25 @@ let falcorExpress = require("falcor-express");
 let FalcorRouter = require("falcor-router");
 let PouchDB = require("pouchdb");
 
+interface RouteImplementation {
+
+  name: string;
+  callback: Function;
+
+}
+
+interface Route {
+
+  path: any[];
+  implementations: RouteImplementation[];
+
+}
+
 class FundsRouter {
 
   // A falcor router, not an Express router
   public router: any;
+  private routes: Route[];
 
   constructor(){
 
