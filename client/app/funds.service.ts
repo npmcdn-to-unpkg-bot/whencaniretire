@@ -53,10 +53,11 @@ export class FundsService {
   public getAll(): void {
 
     let uuid = this.uuidService.get();
-    this.model.set({
-      path: ["funds", uuid, "symbol"],
-      value: 5
-    }).then((jsonEnvelope) => {
+    let uuid2 = this.uuidService.get();
+    this.model.set(
+      falcor.pathValue(["funds", uuid, "symbol"], 5),
+      falcor.pathValue(["funds", uuid2, "symbol"], 4)
+    ).then((jsonEnvelope) => {
       console.log("post handler");
       console.log(jsonEnvelope);
       console.log(JSON.stringify(jsonEnvelope, null, 4));

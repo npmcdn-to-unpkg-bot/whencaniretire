@@ -16,22 +16,34 @@ class FundsRouter {
 
     this.router = FalcorRouter.createClass([{
       route: ["funds", FalcorRouter.keys, "symbol"],
-      set: (jsonGraphArg) => {
-
-        console.log("in set");
-        console.log(jsonGraphArg);
-
-        let data = [{
-          path: ["funds", Object.keys(jsonGraphArg.funds)[0], "symbol"],
-          value: Math.floor(Math.random()*5)
-        }];
-        console.log(data);
-        return data;
-      }
+      set: jsonGraphArg => this.set(jsonGraphArg)
     }]);
 
   }
 
+  private set(jsonGraphArg: any): any {
+
+    console.log("in set");
+    console.log(jsonGraphArg);
+
+    let ids = Object.keys(jsonGraphArg.funds);
+
+    let data = ids.map(id => {
+      return {
+        path: ["funds", id, "symbol"],
+        value: jsonGraphArg.funds[id].symbol
+      };
+    });
+
+    /*let data = [{
+      path: ["funds", Object.keys(jsonGraphArg.funds)[0], "symbol"],
+      value: Math.floor(Math.random()*5)
+    }];*/
+    console.log(data);
+    return data;
+
+  }
+  /*
   private get = (pathSet: any): Promise<any> => {
 
     console.log(pathSet);
@@ -63,7 +75,7 @@ class FundsRouter {
     });
 
 
-  };
+  };*/
 
 }
 
