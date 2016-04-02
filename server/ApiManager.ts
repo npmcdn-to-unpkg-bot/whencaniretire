@@ -1,13 +1,13 @@
 import {Request, Response, Router} from "express";
 import {GenericApi} from "./GenericApi";
 import {Database, SortDirection} from "./Database";
-//import {Model} from "falcor";
 let falcor = require("falcor");
 let falcorExpress = require("falcor-express");
 let FalcorRouter = require("falcor-router");
 let PouchDB = require("pouchdb");
+import * as path from "path";
 
-interface RouteImplementation {
+/*interface RouteImplementation {
 
   name: string;
   callback: Function;
@@ -19,19 +19,30 @@ interface Route {
   path: any[];
   implementations: RouteImplementation[];
 
-}
+}*/
 
 class FundsRouter {
 
   // A falcor router, not an Express router
   public router: any;
-  private routes: Route[];
+  private db: typeof PouchDB;
 
   constructor(){
 
+    this.db = new PouchDB(path.join(__dirname, "..", "db", "funds"));
+
     this.router = FalcorRouter.createClass([{
-      route: ["funds", FalcorRouter.keys, "symbol"],
+      route: ["funds", FalcorRouter.keys, ["name","symbol"]],
       set: jsonGraphArg => this.set(jsonGraphArg)
+    },{
+      route: ["funds", FalcorRouter.keys, ["name","symbol"]],
+      get: jsonGraphArg => this.get(jsonGraphArg)
+    },{
+      route: ["funds", "add"],
+      call: (callPath, args) => { console.log("in call" + JSON.stringify(callPath, null, 2)); }
+    },{
+      route: ["funds", "remove"],
+      call: (callPath, args) => this.remove(callPath, args)
     }]);
 
   }
@@ -50,14 +61,54 @@ class FundsRouter {
       };
     });
 
-    /*let data = [{
-      path: ["funds", Object.keys(jsonGraphArg.funds)[0], "symbol"],
-      value: Math.floor(Math.random()*5)
-    }];*/
     console.log(data);
     return data;
 
   }
+
+  private get(pathSet: any): any {
+
+    console.log(pathSet);
+    console.log("in get");
+
+    return pathSet.map(path => {
+      return {
+        path: path,
+        value: Math.floor(Math.random()*10)
+      };
+    });
+
+  }
+
+  private add(callPath: any, args: any): any {
+
+    return this.db.post({
+      symbol: args.symbol,
+      name: args.name
+    }).then(response => {
+
+      return {
+        path: ["funds", response.id],
+        invalidated: true
+      };
+
+    }).catch(response => {
+
+      return {
+        path: ["funds", "symbol", "add"],
+        value: falcor.error(JSON.stringify(response, null, 2))
+      };
+    });
+
+  }
+
+  private remove(callPath: any, args: any): any {
+
+    return null;
+
+  }
+
+
   /*
   private get = (pathSet: any): Promise<any> => {
 

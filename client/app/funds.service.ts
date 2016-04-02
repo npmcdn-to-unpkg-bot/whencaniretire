@@ -66,6 +66,17 @@ export class FundsService {
       console.error(x);
     });
 
+    this.model.get(["funds", 1, "symbol"], ["funds", 2, "symbol"]).then(jsonEnvelope => {
+      console.log(jsonEnvelope);
+    }).catch(arg => {
+      console.error(arg);
+    });
+
+    this.model.call(["funds", "add"], {
+      symbol: "ANCFX",
+      name: "American Funds Fundamental Investors® Class"
+    }).then(x => { console.log(x); }).catch(x => { console.error(x) });
+
     this._http
       .get("/api/funds")
       .map(res => res.json())
