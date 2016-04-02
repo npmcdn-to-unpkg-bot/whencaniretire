@@ -29,6 +29,7 @@ class FundsRouter {
 
   constructor(){
 
+    console.log(path.join(__dirname, "..", "db", "funds"));
     this.db = new PouchDB(path.join(__dirname, "..", "db", "funds"));
 
     this.router = FalcorRouter.createClass([{
@@ -39,7 +40,7 @@ class FundsRouter {
       get: jsonGraphArg => this.get(jsonGraphArg)
     },{
       route: ["funds", "add"],
-      call: (callPath, args) => { console.log("in call" + JSON.stringify(callPath, null, 2)); }
+      call: (callPath, args) => this.add(callPath, args)
     },{
       route: ["funds", "remove"],
       call: (callPath, args) => this.remove(callPath, args)
@@ -71,20 +72,23 @@ class FundsRouter {
     console.log(pathSet);
     console.log("in get");
 
-    return pathSet.map(path => {
       return {
-        path: path,
+        path: pathSet,
         value: Math.floor(Math.random()*10)
       };
-    });
 
   }
 
-  private add(callPath: any, args: any): any {
+  private add(callPath: any, args: Array<any>): any {
+
+    console.log("in call");
+    console.log(JSON.stringify(callPath, null, 2));
+    console.log(JSON.stringify(args, null, 2));
+    let newObj = args[0];
 
     return this.db.post({
-      symbol: args.symbol,
-      name: args.name
+      symbol: newObj.symbol,
+      name: newObj.name
     }).then(response => {
 
       return {
@@ -95,7 +99,7 @@ class FundsRouter {
     }).catch(response => {
 
       return {
-        path: ["funds", "symbol", "add"],
+        path: callPath,
         value: falcor.error(JSON.stringify(response, null, 2))
       };
     });
