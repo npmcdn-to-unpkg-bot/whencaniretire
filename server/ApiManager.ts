@@ -5,7 +5,9 @@ let falcor = require("falcor");
 let falcorExpress = require("falcor-express");
 let FalcorRouter = require("falcor-router");
 let PouchDB = require("pouchdb");
+PouchDB.plugin(require("pouchdb-find"));
 import * as path from "path";
+let $json = require("json-stringify-safe");
 
 /*interface RouteImplementation {
 
@@ -29,7 +31,6 @@ class FundsRouter {
 
   constructor(){
 
-    console.log(path.join(__dirname, "..", "db", "funds"));
     this.db = new PouchDB(path.join(__dirname, "..", "db", "funds"));
 
     this.router = FalcorRouter.createClass([{
@@ -37,7 +38,7 @@ class FundsRouter {
       set: jsonGraphArg => this.set(jsonGraphArg)
     },{
       route: ["funds", FalcorRouter.keys, ["name","symbol"]],
-      get: jsonGraphArg => this.get(jsonGraphArg)
+      get: this.get.bind(this)
     },{
       route: ["funds", "add"],
       call: (callPath, args) => this.add(callPath, args)
@@ -55,12 +56,13 @@ class FundsRouter {
 
     let ids = Object.keys(jsonGraphArg.funds);
 
-    let data = ids.map(id => {
+    let data = Promise.all(ids.map(id => {
+
       return {
         path: ["funds", id, "symbol"],
         value: jsonGraphArg.funds[id].symbol
       };
-    });
+    }));
 
     console.log(data);
     return data;
@@ -72,10 +74,37 @@ class FundsRouter {
     console.log(pathSet);
     console.log("in get");
 
-      return {
-        path: pathSet,
-        value: Math.floor(Math.random()*10)
-      };
+    let fields = pathSet[2];
+    if(fields.indexOf("_id") === -1) fields.push("_id");
+
+
+    let data = Promise.all(pathSet[1].map(symbol => {
+      console.log("symbol " + symbol);
+      return this.db.find({
+        fields: fields,
+        selector: {
+          symbol: symbol
+        }
+      });
+    }));
+
+    let response = [
+    ];
+
+
+    return data.then(results => {
+      results.map(result => {
+        (<any>result).docs.map(doc => {
+          response.push({
+            path: ["funds", doc._id, "symbol"],
+            value: doc.symbol
+          });
+        });
+      });
+      return response;
+
+    }).catch(x => { console.log("error"); console.log($json(x)); });
+
 
   }
 

@@ -54,7 +54,7 @@ export class FundsService {
 
     let uuid = this.uuidService.get();
     let uuid2 = this.uuidService.get();
-    this.model.set(
+    /*this.model.set(
       falcor.pathValue(["funds", uuid, "symbol"], 5),
       falcor.pathValue(["funds", uuid2, "symbol"], 4)
     ).then((jsonEnvelope) => {
@@ -65,18 +65,18 @@ export class FundsService {
       console.log("error handler");
       console.error(x);
     });
-
-    this.model.get(["funds", 1, "symbol"], ["funds", 2, "symbol"]).then(jsonEnvelope => {
+    */
+    this.model.get(["funds", "ANCFX", "symbol"], ["funds", 2, "symbol"]).then(jsonEnvelope => {
       console.log(jsonEnvelope);
     }).catch(arg => {
       console.error(arg);
     });
 
-    this.model.call(["funds", "add"], [{
+    /*this.model.call(["funds", "add"], [{
       symbol: "ANCFX",
       name: "American Funds Fundamental Investors® Class"
     }]).then(x => { console.log(x); }).catch(x => { console.error(x) });
-
+    */
     this._http
       .get("/api/funds")
       .map(res => res.json())
