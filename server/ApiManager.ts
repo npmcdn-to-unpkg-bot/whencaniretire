@@ -34,16 +34,19 @@ class FundsRouter {
     this.db = new PouchDB(path.join(__dirname, "..", "db", "funds"));
 
     this.router = FalcorRouter.createClass([{
-      route: ["funds", FalcorRouter.keys, ["name","symbol"]],
+      route: ["funds", FalcorRouter.integers, ["name", "symbol"]],
+      get: this.getRefs.bind(this)
+    },{
+      route: ["fundsById", FalcorRouter.keys, ["name","symbol"]],
       set: jsonGraphArg => this.set(jsonGraphArg)
     },{
-      route: ["funds", FalcorRouter.keys, ["name","symbol"]],
+      route: ["fundsById", FalcorRouter.keys, ["name","symbol"]],
       get: this.get.bind(this)
     },{
-      route: ["funds", "add"],
+      route: ["fundsById", "add"],
       call: (callPath, args) => this.add(callPath, args)
     },{
-      route: ["funds", "remove"],
+      route: ["fundsById", "remove"],
       call: (callPath, args) => this.remove(callPath, args)
     }]);
 
@@ -69,6 +72,16 @@ class FundsRouter {
 
   }
 
+  private getRefs(pathSet: any): any {
+
+    console.log("getrefs");
+    console.log(pathSet);
+    return [];
+
+
+
+  }
+
   private get(pathSet: any): any {
 
     console.log(pathSet);
@@ -77,33 +90,26 @@ class FundsRouter {
     let fields = pathSet[2];
     if(fields.indexOf("_id") === -1) fields.push("_id");
 
-
-    let data = Promise.all(pathSet[1].map(symbol => {
-      console.log("symbol " + symbol);
+    return Promise.all(pathSet[1].map(symbol => {
       return this.db.find({
         fields: fields,
         selector: {
           symbol: symbol
         }
-      });
-    }));
+      }).then(results => {
 
-    let response = [
-    ];
-
-
-    return data.then(results => {
-      results.map(result => {
-        (<any>result).docs.map(doc => {
-          response.push({
-            path: ["funds", doc._id, "symbol"],
-            value: doc.symbol
+        return pathSet[2].map(f => {
+          return results.docs.map(doc => {
+            return {
+              path: [pathSet[0], doc._id, f],
+              value: doc[f]
+            };
           });
         });
-      });
-      return response;
 
-    }).catch(x => { console.log("error"); console.log($json(x)); });
+
+      });
+    })).then(x=> { console.log($json(x, null, 2)); });
 
 
   }
