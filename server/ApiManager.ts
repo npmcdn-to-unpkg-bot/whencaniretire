@@ -34,14 +34,14 @@ class FundsRouter {
     this.db = new PouchDB(path.join(__dirname, "..", "db", "funds"));
 
     this.router = FalcorRouter.createClass([{
-      route: ["funds", FalcorRouter.integers, ["name", "symbol"]],
-      get: this.getRefs.bind(this)
+      route: ["funds", FalcorRouter.integers],
+      get: this.get.bind(this)
     },{
       route: ["fundsById", FalcorRouter.keys, ["name","symbol"]],
       set: jsonGraphArg => this.set(jsonGraphArg)
     },{
       route: ["fundsById", FalcorRouter.keys, ["name","symbol"]],
-      get: this.get.bind(this)
+      get: this.getById.bind(this)
     },{
       route: ["fundsById", "add"],
       call: (callPath, args) => this.add(callPath, args)
@@ -72,44 +72,75 @@ class FundsRouter {
 
   }
 
-  private getRefs(pathSet: any): any {
+  private get(pathSet: any): any {
 
     console.log("getrefs");
     console.log(pathSet);
-    return [];
 
+    return this.db.find({
+      selector: {
+        symbol: {
+          $gt: null
+        }
+      },
+      fields: ["_id"],
+      sort: ["symbol"],
+      limit: 10,
+      skip: 10
+    }).then(data => {
+      let d = pathSet[1].map(index => {
+        return {
+          path: [pathSet[0], index],
+          value: falcor.Model.ref(["fundsById", data.docs[index]._id])
+        };
+      });
+      //console.log($json(d, null, 2));
+      return d;
+    }).catch(err => {
+      console.log(err);
+      return [];
+    });
 
+    //funds.m-n.x
 
   }
 
-  private get(pathSet: any): any {
+  private getById(pathSet: any): any {
 
     console.log(pathSet);
-    console.log("in get");
+    console.log("in get by id");
 
-    let fields = pathSet[2];
+    //easy way of cloning an array
+    let fields = pathSet[2].slice(0);
     if(fields.indexOf("_id") === -1) fields.push("_id");
 
-    return Promise.all(pathSet[1].map(symbol => {
+    return Promise.all(pathSet[1].map(id => {
       return this.db.find({
         fields: fields,
         selector: {
-          symbol: symbol
+          _id: id
         }
       }).then(results => {
 
-        return pathSet[2].map(f => {
-          return results.docs.map(doc => {
-            return {
+        let d = [];
+        pathSet[2].forEach(f => {
+          results.docs.forEach(doc => {
+            d.push({
               path: [pathSet[0], doc._id, f],
               value: doc[f]
-            };
+            });
           });
         });
+        console.log($json(d, null, 2));
+        return d;
 
 
       });
-    })).then(x=> { console.log($json(x, null, 2)); });
+    })).then(results => {
+
+      return [].concat.apply([], results);
+
+    });
 
 
   }

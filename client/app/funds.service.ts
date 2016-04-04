@@ -66,8 +66,9 @@ export class FundsService {
       console.error(x);
     });
     */
-    this.model.get(["funds", {from: 0, to: 9}, "symbol"]).then(jsonEnvelope => {
+    this.model.get(["funds", {from: 0, to: 1}, ["name", "symbol"]]).then(jsonEnvelope => {
       console.log(jsonEnvelope);
+      console.log(this.model);
     }).catch(arg => {
       console.error(arg);
     });
