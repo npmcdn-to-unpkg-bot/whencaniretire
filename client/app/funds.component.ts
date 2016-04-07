@@ -3,6 +3,8 @@ import {RouteConfig} from "angular2/router";
 import {FundsService} from "./funds.service";
 //import {Modal, ModalConfig, ModalDialogInstance, YesNoModal, YesNoModalContent, ICustomModal} from "angular2-modal";
 import {Observable} from "rxjs/Observable";
+import "rxjs/add/operator/pluck";
+import {ValuesPipe} from "./ValuesPipe";
 
 class Fund {
 
@@ -18,7 +20,8 @@ class Fund {
 
 @Component({
   selector: "wcir-funds",
-  templateUrl: "/partials/funds"
+  templateUrl: "/partials/funds",
+  pipes: [ValuesPipe]
 })
 export class FundsComponent implements OnInit {
 
@@ -26,6 +29,8 @@ export class FundsComponent implements OnInit {
   private fundsObserver: Observable<Fund[]>
   private editingFund: number;
   private newFund: Fund;
+  public numFunds: any;
+  public obj;
 
   constructor(private fundsService: FundsService){
   }
@@ -37,7 +42,14 @@ export class FundsComponent implements OnInit {
     this.fundsService.getAll();
     this.clearNew();
     this.cancelEditing();
-
+    this.fundData = {
+      funds: {
+      }
+    };
+    this.fundsService.getFalcor(["funds", {from: 0, to: 24}, ["name", "symbol"]]).subscribe(response => {
+      this.fundData = response;
+    });
+    this.obj = {z: {a: 1}, y: {b: 2}, x: {c: 3}, w: {d: 4} };
   }
 
   public update(f:Fund): void {
