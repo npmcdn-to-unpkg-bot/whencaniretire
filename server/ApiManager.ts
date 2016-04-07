@@ -9,20 +9,6 @@ PouchDB.plugin(require("pouchdb-find"));
 import * as path from "path";
 let $json = require("json-stringify-safe");
 
-/*interface RouteImplementation {
-
-  name: string;
-  callback: Function;
-
-}
-
-interface Route {
-
-  path: any[];
-  implementations: RouteImplementation[];
-
-}*/
-
 class FundsRouter {
 
   // A falcor router, not an Express router
@@ -34,6 +20,9 @@ class FundsRouter {
     this.db = new PouchDB(path.join(__dirname, "..", "db", "funds"));
 
     this.router = FalcorRouter.createClass([{
+      route: ["funds", "length"],
+      get: this.getFundsLength.bind(this)
+    },{
       route: ["funds", FalcorRouter.integers],
       get: this.get.bind(this)
     },{
@@ -52,10 +41,33 @@ class FundsRouter {
 
   }
 
+  private getFundsLength(pathSet: any): any {
+
+    return this.db.find({
+      selector: {
+        _id: {
+          $gt: null
+        }
+      }
+    }).then(data => {
+      console.log("in pathset promise");
+      console.log(pathSet);
+      console.log(data.docs);
+      return [{
+        path: pathSet,
+        value: data.docs.length
+      }];
+    }).catch(err => {
+      return [{
+        path: pathSet,
+        value: falcor.Model.error(err)
+      }];
+    });
+
+  }
+
   private set(jsonGraphArg: any): any {
 
-    console.log("in set");
-    console.log(jsonGraphArg);
 
     let ids = Object.keys(jsonGraphArg.funds);
 
@@ -67,15 +79,16 @@ class FundsRouter {
       };
     }));
 
-    console.log(data);
     return data;
 
   }
 
   private get(pathSet: any): any {
 
-    console.log("getrefs");
-    console.log(pathSet);
+    let min = Math.min.apply(null, pathSet[1]);
+    let max = Math.max.apply(null, pathSet[1]);
+    let skip = min;
+    let limit = 1 + max - min;
 
     return this.db.find({
       selector: {
@@ -85,30 +98,29 @@ class FundsRouter {
       },
       fields: ["_id"],
       sort: ["symbol"],
-      limit: 10,
-      skip: 10
+      limit: limit,
+      skip: skip
     }).then(data => {
-      let d = pathSet[1].map(index => {
-        return {
-          path: [pathSet[0], index],
-          value: falcor.Model.ref(["fundsById", data.docs[index]._id])
-        };
+      let d = [];
+      pathSet[1].forEach(index => {
+        let docIndex = index - skip;
+        if(data.docs.hasOwnProperty(docIndex)){
+          //Path hit a search result
+          d.push({
+            path: [pathSet[0], index],
+            value: falcor.Model.ref(["fundsById", data.docs[docIndex]._id])
+          });
+        }
+        // We ignore errors here, simply don't return references to the client
       });
-      //console.log($json(d, null, 2));
       return d;
     }).catch(err => {
       console.log(err);
       return [];
     });
-
-    //funds.m-n.x
-
   }
 
   private getById(pathSet: any): any {
-
-    console.log(pathSet);
-    console.log("in get by id");
 
     //easy way of cloning an array
     let fields = pathSet[2].slice(0);
@@ -131,7 +143,6 @@ class FundsRouter {
             });
           });
         });
-        console.log($json(d, null, 2));
         return d;
 
 
@@ -147,9 +158,6 @@ class FundsRouter {
 
   private add(callPath: any, args: Array<any>): any {
 
-    console.log("in call");
-    console.log(JSON.stringify(callPath, null, 2));
-    console.log(JSON.stringify(args, null, 2));
     let newObj = args[0];
 
     return this.db.post({
