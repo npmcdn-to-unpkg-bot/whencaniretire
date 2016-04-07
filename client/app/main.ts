@@ -4,11 +4,11 @@ import {ROUTER_PROVIDERS} from "angular2/router";
 import {HTTP_PROVIDERS} from "angular2/http";
 import {AppComponent} from "./app.component";
 import {FundsService} from "./funds.service";
-import {UuidService} from "./UuidService";
+import {ValuesPipe} from "./ValuesPipe";
 
 bootstrap(AppComponent, [
   ROUTER_PROVIDERS,
   HTTP_PROVIDERS,
   FundsService,
-  UuidService
+  ValuesPipe
 ]);
