@@ -2,22 +2,34 @@ import {Pipe, PipeTransform} from 'angular2/core';
 
 @Pipe({name: 'values'})
 export class ValuesPipe implements PipeTransform {
-    transform(value: any, args?: any[]): Object[] {
-        let keyArr = Object.keys(value),
-            dataArr = [],
-            keyName = args[0];
 
-        keyArr.forEach(key => {
-            value[key][keyName] = key;
-            dataArr.push(value[key])
-        });
+  transform(values: any, args?: any[]): Object[] {
+    let keys: string[] = Object.keys(values);
+    let data: any[] = [];
+    let keyName: string = "_id";
+    if(args.length > 0 && args[0].length > 0 && args[0] != null) keyName = args[0];
 
-        if(args[1]) {
-            dataArr.sort((a: Object, b: Object): number => {
-                return a[keyName] > b[keyName] ? 1 : -1;
-            });
-        }
+    /*let x = keys.map(key => {
+      console.log(value[key]);
+      value[key][keyName] = key;
+      return value;
+      //data.push(value[key])
+    });
 
-        return dataArr;
-    }
+    console.log(x);
+
+    return x;
+
+    //return data;
+    */
+    return keys.map(k => {
+      return {
+        index: k,
+        value: values[k]
+      }
+    });
+
+
+
+  }
 }
