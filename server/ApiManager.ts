@@ -23,14 +23,14 @@ class FundsRouter {
       route: ["funds", "length"],
       get: this.getFundsLength.bind(this)
     },{
-      route: ["funds", FalcorRouter.integers],
-      get: this.get.bind(this)
+      route: ["funds", "data", FalcorRouter.integers],
+      get: this.getFundsData.bind(this)
     },{
       route: ["fundsById", FalcorRouter.keys, ["name","symbol"]],
       set: jsonGraphArg => this.set(jsonGraphArg)
     },{
-      route: ["fundsById", FalcorRouter.keys, ["name","symbol"]],
-      get: this.getById.bind(this)
+      route: ["fundsById", FalcorRouter.keys, ["_id", "name","symbol"]],
+      get: this.getFundsById.bind(this)
     },{
       route: ["fundsById", "add"],
       call: (callPath, args) => this.add(callPath, args)
@@ -50,9 +50,6 @@ class FundsRouter {
         }
       }
     }).then(data => {
-      console.log("in pathset promise");
-      console.log(pathSet);
-      console.log(data.docs);
       return [{
         path: pathSet,
         value: data.docs.length
@@ -83,10 +80,10 @@ class FundsRouter {
 
   }
 
-  private get(pathSet: any): any {
+  private getFundsData(pathSet: any): any {
 
-    let min = Math.min.apply(null, pathSet[1]);
-    let max = Math.max.apply(null, pathSet[1]);
+    let min = Math.min.apply(null, pathSet[2]);
+    let max = Math.max.apply(null, pathSet[2]);
     let skip = min;
     let limit = 1 + max - min;
 
@@ -102,12 +99,12 @@ class FundsRouter {
       skip: skip
     }).then(data => {
       let d = [];
-      pathSet[1].forEach(index => {
+      pathSet[2].forEach(index => {
         let docIndex = index - skip;
         if(data.docs.hasOwnProperty(docIndex)){
           //Path hit a search result
           d.push({
-            path: [pathSet[0], index],
+            path: ["funds", "data"].concat(index),
             value: falcor.Model.ref(["fundsById", data.docs[docIndex]._id])
           });
         }
@@ -115,12 +112,14 @@ class FundsRouter {
       });
       return d;
     }).catch(err => {
-      console.log(err);
-      return [];
+      return [{
+        path: ["funds", "data"],
+        value: falcor.Model.error(err)
+      }];
     });
   }
 
-  private getById(pathSet: any): any {
+  private getFundsById(pathSet: any): any {
 
     //easy way of cloning an array
     let fields = pathSet[2].slice(0);
@@ -148,11 +147,8 @@ class FundsRouter {
 
       });
     })).then(results => {
-
       return [].concat.apply([], results);
-
     });
-
 
   }
 
@@ -185,41 +181,6 @@ class FundsRouter {
     return null;
 
   }
-
-
-  /*
-  private get = (pathSet: any): Promise<any> => {
-
-    console.log(pathSet);
-    return new Promise((resolve, reject) => {
-      let results = [];
-
-      results.push({
-        path: ["funds", "1", "symbol"],
-        value: "ANEFX"
-      });
-
-      resolve(results);
-
-    });
-
-  };
-
-  private set = (jsonGraphArg: any): Promise<any> => {
-
-    console.log("in bottom set");
-    console.log(jsonGraphArg);
-    let fundKeys = Object.keys(jsonGraphArg.fundIds);
-
-    return new Promise((resolve, reject) => {
-
-      console.log(jsonGraphArg);
-      console.log(null);
-
-    });
-
-
-  };*/
 
 }
 

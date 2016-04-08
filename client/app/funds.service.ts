@@ -7,7 +7,6 @@ import "rxjs/add/operator/pluck";
 import {Observable} from "rxjs/Observable";
 import {Observer} from "rxjs/Observer";
 import * as falcor from "falcor";
-import {UuidService} from "./UuidService";
 
 interface Fund {
   id: number;
@@ -28,7 +27,7 @@ export class FundsService {
   private commonOptions: RequestOptions;
   public model;
 
-  constructor(private _http: Http, private uuidService: UuidService){
+  constructor(private _http: Http){
     this._funds$ = new Observable(observer => this._fundsObserver = observer).share();
     this._dataStore = {
       funds: []
@@ -46,6 +45,7 @@ export class FundsService {
 
   public getFalcor(path: any): Observable<any> {
 
+    console.log(path);
     return Observable
       .fromPromise(this.model.get(path))
       .pluck("json");
@@ -66,11 +66,6 @@ export class FundsService {
     let start = pageSize * page;
     let end = pageSize * (page + 1) - 1;
 
-    this.model.get(["funds", {from: start, to: end}, ["name", "symbol"]]).then(jsonEnvelope => {
-      //console.log(jsonEnvelope.json);
-    }).then(data => {
-      //;console.log(data);
-    });
 
     /*this.model.get(["funds", "length"]).then(jsonEnvelope => {
       console.log(jsonEnvelope.json);

@@ -5,18 +5,18 @@ import {FundsService} from "./funds.service";
 import {Observable} from "rxjs/Observable";
 import "rxjs/add/operator/pluck";
 import {ValuesPipe} from "./ValuesPipe";
-
+/*
 class Fund {
 
-  public id: number;
-  public fund_symbol: string;
-  public fund_name: string;
+  public _id: string;
+  public symbol: string;
+  public name: string;
 
   constructor(){
     this.fund_name = "";
     this.fund_symbol = "";
   }
-};
+};*/
 
 @Component({
   selector: "wcir-funds",
@@ -25,65 +25,73 @@ class Fund {
 })
 export class FundsComponent implements OnInit {
 
-  public funds: Fund[];
-  private fundsObserver: Observable<Fund[]>
-  private editingFund: number;
-  private newFund: Fund;
-  public numFunds: any;
-  public obj;
+  //public funds: Fund[];
+  //private fundsObserver: Observable<Fund[]>
+  private editingFund: string;
+  private newFund: any;
+  private modelState: any;
 
   constructor(private fundsService: FundsService){
   }
 
   public ngOnInit(){
-    this.fundsService.funds$.subscribe((updatedFunds) => {
+    /*this.fundsService.funds$.subscribe((updatedFunds) => {
       this.funds = updatedFunds
     });
-    this.fundsService.getAll();
+   */
+    //this.fundsService.getAll();
+    this.getAll();
     this.clearNew();
     this.cancelEditing();
-    this.fundData = {
-      funds: {
-      }
-    };
-    this.fundsService.getFalcor(["funds", {from: 0, to: 24}, ["name", "symbol"]]).subscribe(response => {
-      this.fundData = response;
-    });
-    this.obj = {z: {a: 1}, y: {b: 2}, x: {c: 3}, w: {d: 4} };
   }
 
-  public update(f:Fund): void {
-    this.fundsService.updateFund(f);
+  public update(f:any): void {
+    //this.fundsService.updateFund(f);
     this.cancelEditing();
+  }
+
+  public getAll(): void {
+
+    this.modelState = {
+      funds: {
+        data: {}
+      }
+    };
+
+    this.fundsService.getFalcor(["funds", "data", {from: 0, to: 24}, ["_id", "symbol", "name"]]).pluck("funds", "data").subscribe(response => {
+      this.modelState.funds.data = response;
+      console.log(response);
+    });
+
   }
 
   public create(): void {
-    this.fundsService.create(this.newFund);
+    //this.fundsService.create(this.newFund);
     this.clearNew();
   }
 
-  public edit(f:Fund): void {
-    this.editingFund = f.id;
+  public edit(f:any): void {
+    this.editingFund = f._id;
   }
 
   public cancelEditing(): void {
-    this.editingFund = -1;
+    this.editingFund = undefined;
   }
 
-  public isEditing(f:Fund): boolean {
-    return f.id == this.editingFund;
+  public isEditing(f:any): boolean {
+    return f._id === this.editingFund;
   }
 
   public clearNew(): void {
-    this.newFund = new Fund();
+    this.newFund = {};
   }
 
-  public deleteFund(f:Fund): void {
-    this.fundsService.deleteFund(f);
+  public deleteFund(f:any): void {
+    //this.fundsService.deleteFund(f);
   }
 
-  public trackFundById(index: number, fund: Fund): number {
-    return fund.id;
+  public trackFundById(index: number, fund: any): string {
+    return fund._id;
   }
 };
 
