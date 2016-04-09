@@ -9,36 +9,70 @@ PouchDB.plugin(require("pouchdb-find"));
 import * as path from "path";
 let $json = require("json-stringify-safe");
 
+interface RouteImplementation {
+
+  route: any[];
+  method: string;
+  impl: Function;
+}
+
 class FundsRouter {
 
   // A falcor router, not an Express router
   public router: any;
   private db: typeof PouchDB;
+  private routeData: RouteImplementation[];
 
   constructor(){
 
     this.db = new PouchDB(path.join(__dirname, "..", "db", "funds"));
 
-    this.router = FalcorRouter.createClass([{
+    this.routeData = [{
       route: ["funds", "length"],
-      get: this.getFundsLength.bind(this)
+      method: "get",
+      impl: this.getFundsLength
     },{
       route: ["funds", "data", FalcorRouter.integers],
-      get: this.getFundsData.bind(this)
+      method: "get",
+      impl: this.getFundsData
+    },{
+      route: ["fundsById", FalcorRouter.keys, ["_id", "name","symbol"]],
+      method: "get",
+      impl: this.getFundsById
+    },{
+      route: ["fundsById","remove"],
+      method: "call",
+      impl: this.remove
+    }];
+
+    let falcorRouteData = [];
+
+    this.routeData.forEach(r => {
+      let rt = {
+        route: r.route,
+      };
+      rt[r.method] = r.impl.bind(this);
+
+      falcorRouteData.push(rt);
+    });
+
+    this.router = FalcorRouter.createClass(falcorRouteData);
+
+
+/*
+    this.router = FalcorRouter.createClass([{
     },{
       route: ["fundsById", FalcorRouter.keys, ["name","symbol"]],
       set: jsonGraphArg => this.set(jsonGraphArg)
     },{
-      route: ["fundsById", FalcorRouter.keys, ["_id", "name","symbol"]],
-      get: this.getFundsById.bind(this)
     },{
       route: ["fundsById", "add"],
       call: (callPath, args) => this.add(callPath, args)
     },{
       route: ["fundsById", "remove"],
-      call: (callPath, args) => this.remove(callPath, args)
+      call: this.remove.bind(this)
     }]);
-
+*/
   }
 
   private getFundsLength(pathSet: any): any {
