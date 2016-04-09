@@ -40,7 +40,7 @@ class FundsRouter {
       method: "get",
       impl: this.getFundsById
     },{
-      route: ["fundsById","remove"],
+      route: ["fundsById", FalcorRouter.keys, "remove"],
       method: "call",
       impl: this.remove
     }];
@@ -212,7 +212,9 @@ class FundsRouter {
 
   private remove(callPath: any, args: any): any {
 
-    return null;
+    console.log(callPath);
+
+    return [];
 
   }
 
