@@ -9,7 +9,10 @@ export class ValuesPipe implements PipeTransform {
     if(values == null) return null;
 
     return Object.keys(values).map(k => {
-      return values[k];
+      return {
+        key: k,
+        value: values[k]
+      };
     });
 
   }
