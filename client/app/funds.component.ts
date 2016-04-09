@@ -71,7 +71,7 @@ export class FundsComponent implements OnInit {
   }
 
   public edit(f:any): void {
-    this.editingFund = f._id;
+    this.editingFund = f.key;
   }
 
   public cancelEditing(): void {
@@ -79,7 +79,7 @@ export class FundsComponent implements OnInit {
   }
 
   public isEditing(f:any): boolean {
-    return f._id === this.editingFund;
+    return f.key === this.editingFund;
   }
 
   public clearNew(): void {
@@ -91,7 +91,7 @@ export class FundsComponent implements OnInit {
   }
 
   public trackFundById(index: number, fund: any): string {
-    return fund._id;
+    return fund.key;
   }
 };
 

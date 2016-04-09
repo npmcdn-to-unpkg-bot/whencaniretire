@@ -9,17 +9,17 @@ form(method="POST")
       tr(template="ngFor #fund of (modelState.funds.data | values); trackBy:trackFundById")
         template(bind-ngIf="!isEditing(fund)")
           td
-            span.non-editing-control {{fund.symbol}}
+            span.non-editing-control {{fund.value.symbol}}
           td
-            span.non-editing-control {{fund.name}}
+            span.non-editing-control {{fund.value.name}}
           td
             button.btn.btn-primary(type="button", on-click="edit(fund)") Edit
             button.btn.btn-danger(type="button", on-click="deleteFund(fund)") Delete
         template(bind-ngIf="isEditing(fund)")
           td
-            input.form-control(bindon-ngModel="fund.symbol")
+            input.form-control(bindon-ngModel="fund.value.symbol")
           td
-            input.form-control(bindon-ngModel="fund.name")
+            input.form-control(bindon-ngModel="fund.value.name")
           td
             button.btn.btn-success(type="submit", on-click="update(fund)") Save
             button.btn.btn-danger(type="button", on-click="cancelEditing()") Cancel
