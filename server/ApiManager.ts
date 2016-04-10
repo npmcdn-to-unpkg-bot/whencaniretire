@@ -212,9 +212,32 @@ class FundsRouter {
 
   private remove(callPath: any, args: any): any {
 
+    console.log("in remove");
     console.log(callPath);
 
-    return [];
+    return this.db.find({
+      selector: {
+        _id: callPath[1][0]
+      }
+    }).then(doc => {
+      console.log(doc);
+      doc.docs[0]._deleted = true;
+      return this.db.put(doc.docs[0]);
+    }).then(result => {
+
+      return [{
+        path: ["fundsById", callPath[1][0]],
+        invalidated: true
+      },{
+        path: ["funds"],
+        invalidated: true
+      }];
+
+    }).catch(err => {
+      console.error(err);
+      return [];
+    });
+
 
   }
 

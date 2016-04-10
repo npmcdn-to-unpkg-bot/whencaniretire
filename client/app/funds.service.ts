@@ -45,7 +45,6 @@ export class FundsService {
 
   public getFalcor(path: any): Observable<any> {
 
-    console.log(path);
     return Observable
       .fromPromise(this.model.get(path))
       .pluck("json");

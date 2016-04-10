@@ -14,7 +14,7 @@ form(method="POST")
             span.non-editing-control {{fund.value.name}}
           td
             button.btn.btn-primary(type="button", on-click="edit(fund)") Edit
-            button.btn.btn-danger(type="button", on-click="deleteFund(fund)") Delete
+            button.btn.btn-danger(type="button", on-click="remove(fund)") Delete
         template(bind-ngIf="isEditing(fund)")
           td
             input.form-control(bindon-ngModel="fund.value.symbol")

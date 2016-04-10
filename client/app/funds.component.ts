@@ -60,7 +60,6 @@ export class FundsComponent implements OnInit {
 
     this.fundsService.getFalcor(["funds", "data", {from: 0, to: 24}, ["_id", "symbol", "name"]]).pluck("funds", "data").subscribe(response => {
       this.modelState.funds.data = response;
-      console.log(response);
     });
 
   }
@@ -86,7 +85,10 @@ export class FundsComponent implements OnInit {
     this.newFund = {};
   }
 
-  public deleteFund(f:any): void {
+  public remove(f:any): void {
+    console.log("in remove");
+    console.log(f);
+    this.fundsService.model.call(["fundsById", f.value._id, "remove"]).then(x => console.log(x)).catch(e => console.error(e));
     //this.fundsService.deleteFund(f);
   }
 
