@@ -1,6 +1,6 @@
 import {DashboardComponent} from "./dashboard.component";
 import {ActivityComponent} from "./activity.component";
-import {FundsComponent} from "./funds.component";
+import {FundsComponent} from "./FundsComponent";
 
 export var AppConfig = {
 
