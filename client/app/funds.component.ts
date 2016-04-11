@@ -1,17 +1,16 @@
-import {Component, Injector, provide, OnInit} from "angular2/core";
+import {Component, Injector, provide, OnInit, Injectable} from "angular2/core";
 import {RouteConfig} from "angular2/router";
 import {FundsService} from "./funds.service";
 //import {Modal, ModalConfig, ModalDialogInstance, YesNoModal, YesNoModalContent, ICustomModal} from "angular2-modal";
 import {Observable} from "rxjs/Observable";
 import "rxjs/add/operator/pluck";
 import {ValuesPipe} from "./ValuesPipe";
-import {Fund, FundID, FundComponent} from "./FundComponent";
+import {Fund, FundID, FundWrapper} from "./Fund";
 
 @Component({
   selector: "wcir-funds",
   templateUrl: "/partials/funds",
-  pipes: [ValuesPipe],
-  directives: [FundComponent]
+  pipes: [ValuesPipe]
 })
 export class FundsComponent implements OnInit {
 
@@ -59,17 +58,13 @@ export class FundsComponent implements OnInit {
     this.clearNew();
   }
 
-  public edit(f:any): void {
+  public edit(f:FundWrapper): void {
     this.editingFund = f.key;
   }
 
   public cancelEditing(): void {
     this.editingFund = undefined;
   }
-
-  /*public isEditing(f:any): boolean {
-    return f.key === this.editingFund;
-  }*/
 
   public clearNew(): void {
     this.newFund = {
@@ -86,8 +81,16 @@ export class FundsComponent implements OnInit {
     //this.fundsService.deleteFund(f);
   }
 
-  public trackFundById(index: number, fund: any): string {
+  public trackFundById(index: number, fund: FundWrapper): string {
+
     return fund.key;
+
+  }
+
+  public isEditing(f:FundWrapper): boolean {
+
+    return this.editingFund === f.value._id;
+
   }
 };
 
