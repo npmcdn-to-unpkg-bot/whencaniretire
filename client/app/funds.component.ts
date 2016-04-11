@@ -5,30 +5,20 @@ import {FundsService} from "./funds.service";
 import {Observable} from "rxjs/Observable";
 import "rxjs/add/operator/pluck";
 import {ValuesPipe} from "./ValuesPipe";
-/*
-class Fund {
-
-  public _id: string;
-  public symbol: string;
-  public name: string;
-
-  constructor(){
-    this.fund_name = "";
-    this.fund_symbol = "";
-  }
-};*/
+import {Fund, FundID, FundComponent} from "./FundComponent";
 
 @Component({
   selector: "wcir-funds",
   templateUrl: "/partials/funds",
-  pipes: [ValuesPipe]
+  pipes: [ValuesPipe],
+  directives: [FundComponent]
 })
 export class FundsComponent implements OnInit {
 
   //public funds: Fund[];
   //private fundsObserver: Observable<Fund[]>
-  private editingFund: string;
-  private newFund: any;
+  private editingFund: FundID;
+  private newFund: Fund;
   private modelState: any;
 
   constructor(private fundsService: FundsService){
@@ -77,12 +67,16 @@ export class FundsComponent implements OnInit {
     this.editingFund = undefined;
   }
 
-  public isEditing(f:any): boolean {
+  /*public isEditing(f:any): boolean {
     return f.key === this.editingFund;
-  }
+  }*/
 
   public clearNew(): void {
-    this.newFund = {};
+    this.newFund = {
+      _id: "",
+      name: "",
+      symbol: ""
+    };
   }
 
   public remove(f:any): void {
