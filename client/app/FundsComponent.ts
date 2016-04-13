@@ -1,4 +1,4 @@
-import {Component, Injector, provide, OnInit, Injectable} from "angular2/core";
+import {Component, OnInit} from "angular2/core";
 import {RouteConfig} from "angular2/router";
 import {FundsService} from "./funds.service";
 //import {Modal, ModalConfig, ModalDialogInstance, YesNoModal, YesNoModalContent, ICustomModal} from "angular2-modal";
@@ -14,22 +14,14 @@ import {Fund, FundID, FundWrapper} from "./Fund";
 })
 export class FundsComponent implements OnInit {
 
-  //public funds: Fund[];
-  //private fundsObserver: Observable<Fund[]>
   private editingFund: FundID;
   private newFund: Fund;
-  private modelState: any;
 
   constructor(private fundsService: FundsService){
   }
 
   public ngOnInit(){
-    /*this.fundsService.funds$.subscribe((updatedFunds) => {
-      this.funds = updatedFunds
-    });
-   */
-    //this.fundsService.getAll();
-    this.getAll();
+    this.fundsService.getAll();
     this.clearNew();
     this.cancelEditing();
   }
@@ -39,19 +31,6 @@ export class FundsComponent implements OnInit {
     this.cancelEditing();
   }
 
-  public getAll(): void {
-
-    this.modelState = {
-      funds: {
-        data: {}
-      }
-    };
-
-    this.fundsService.getFalcor(["funds", "data", {from: 0, to: 24}, ["_id", "symbol", "name"]]).pluck("funds", "data").subscribe(response => {
-      this.modelState.funds.data = response;
-    });
-
-  }
 
   public create(): void {
     //this.fundsService.create(this.newFund);

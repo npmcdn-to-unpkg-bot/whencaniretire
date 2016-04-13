@@ -1,5 +1,4 @@
-import {Injectable} from "angular2/core";
-import {Http, Headers, RequestOptions} from "angular2/http";
+import {Injectable, OnInit} from "angular2/core";
 import "rxjs/add/operator/map";
 import "rxjs/add/operator/share";
 import "rxjs/add/observable/fromPromise";
@@ -7,39 +6,35 @@ import "rxjs/add/operator/pluck";
 import {Observable} from "rxjs/Observable";
 import {Observer} from "rxjs/Observer";
 import * as falcor from "falcor";
+import {Fund} from "./Fund"
 
-interface Fund {
-  id: number;
-  fund_symbol: string;
-  fund_name: string;
-};
 
 interface Datastore {
   funds: Fund[]
 };
 
 @Injectable()
-export class FundsService {
+export class FundsService implements OnInit {
 
-  private _dataStore: Datastore;
-  private _fundsObserver: Observer<Fund[]>;
-  private _funds$: Observable<Fund[]>;
-  private commonOptions: RequestOptions;
+  public dataStore: any;
+  //private _fundsObserver: Observer<Fund[]>;
+  //private _funds$: Observable<Fund[]>;
   public model;
 
-  constructor(private _http: Http){
-    this._funds$ = new Observable(observer => this._fundsObserver = observer).share();
-    this._dataStore = {
-      funds: []
+  constructor(){
+    //this._funds$ = new Observable(observer => this._fundsObserver = observer).share();
+    this.dataStore = {
+      funds: {
+        data: { }
+      }
     };
-    this.commonOptions = new RequestOptions({
-      headers: new Headers({
-        "Content-Type": "application/json"
-      })
-    });
     this.model = new falcor.Model({
       source: new falcor.HttpDataSource("/api/model")
     }).batch();
+  }
+
+  public ngOnInit(): void {
+
 
   }
 
@@ -48,16 +43,7 @@ export class FundsService {
     return Observable
       .fromPromise(this.model.get(path))
       .pluck("json");
-
   }
-
-  public get funds$(): Observable<Fund[]> {
-
-    return this._funds$;
-
-  }
-
-
 
   public getAll(page: number = 0): void {
 
@@ -65,24 +51,29 @@ export class FundsService {
     let start = pageSize * page;
     let end = pageSize * (page + 1) - 1;
 
+    this.getFalcor(["funds", "data", {from : start, to: end}, ["_id", "symbol", "name"]]).subscribe(response => {
+      console.log(response);
+      this.dataStore.funds.data = response.funds.data;
+    });
 
     /*this.model.get(["funds", "length"]).then(jsonEnvelope => {
       console.log(jsonEnvelope.json);
     });
     */
-    this._http
+    /*this._http
       .get("/api/funds")
       .map(res => res.json())
       .subscribe(data => {
-        this._dataStore.funds = data;
-        this._fundsObserver.next(this._dataStore.funds)
+        this.dataStore.funds = data;
+        this._fundsObserver.next(this.dataStore.funds)
       }, error => {
         console.log("Could not load funds");
       });
+     */
 
   }
 
-  public create(f:Fund): void {
+  /*public create(f:Fund): void {
     this._http.post("/api/funds", JSON.stringify(f), this.commonOptions)
       .map(res => res.json())
       .subscribe(data => {
@@ -109,6 +100,6 @@ export class FundsService {
       }, error => {
         console.log("err " + error);
       });
-  }
+  }*/
 
 };

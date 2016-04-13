@@ -6,7 +6,7 @@ form(method="POST")
         th Name
         th Actions
     tbody
-      tr(template="ngFor #fund of (modelState.funds.data | values); trackBy:trackFundById")
+      tr(template="ngFor #fund of (fundsService.dataStore.funds.data | values); trackBy:trackFundById")
         template(bind-ngIf="!isEditing(fund)")
           td
             span.non-editing-control {{fund.value.symbol}}
