@@ -6,15 +6,16 @@ import {Observable} from "rxjs/Observable";
 import "rxjs/add/operator/pluck";
 import {ValuesPipe} from "./ValuesPipe";
 import {Fund, FundID, FundWrapper} from "./Fund";
+import {FundComponent} from "./FundComponent";
 
 @Component({
   selector: "wcir-funds",
   templateUrl: "/partials/funds",
-  pipes: [ValuesPipe]
+  pipes: [ValuesPipe],
+  directives: [FundComponent]
 })
 export class FundsComponent implements OnInit {
 
-  private editingFund: FundID;
   private newFund: Fund;
 
   constructor(private fundsService: FundsService){
@@ -23,26 +24,12 @@ export class FundsComponent implements OnInit {
   public ngOnInit(){
     this.fundsService.getAll();
     this.clearNew();
-    this.cancelEditing();
+    //this.cancelEditing();
   }
-
-  public update(f:any): void {
-    //this.fundsService.updateFund(f);
-    this.cancelEditing();
-  }
-
 
   public create(): void {
     //this.fundsService.create(this.newFund);
     this.clearNew();
-  }
-
-  public edit(f:FundWrapper): void {
-    this.editingFund = f.key;
-  }
-
-  public cancelEditing(): void {
-    this.editingFund = undefined;
   }
 
   public clearNew(): void {
@@ -66,11 +53,6 @@ export class FundsComponent implements OnInit {
 
   }
 
-  public isEditing(f:FundWrapper): boolean {
-
-    return this.editingFund === f.value._id;
-
-  }
 };
 
 

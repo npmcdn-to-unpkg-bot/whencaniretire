@@ -6,7 +6,7 @@ import "rxjs/add/operator/pluck";
 import {Observable} from "rxjs/Observable";
 import {Observer} from "rxjs/Observer";
 import * as falcor from "falcor";
-import {Fund} from "./Fund"
+import {Fund, FundID, FundWrapper} from "./Fund"
 
 
 interface Datastore {
@@ -20,6 +20,7 @@ export class FundsService implements OnInit {
   //private _fundsObserver: Observer<Fund[]>;
   //private _funds$: Observable<Fund[]>;
   public model;
+  public editingFund: FundID;
 
   constructor(){
     //this._funds$ = new Observable(observer => this._fundsObserver = observer).share();
@@ -31,11 +32,17 @@ export class FundsService implements OnInit {
     this.model = new falcor.Model({
       source: new falcor.HttpDataSource("/api/model")
     }).batch();
+
+    this.editingFund = null;
   }
 
   public ngOnInit(): void {
 
 
+  }
+
+  public edit(f:FundWrapper): void {
+    this.editingFund = f.value._id;
   }
 
   public getFalcor(path: any): Observable<any> {

@@ -1,4 +1,4 @@
-template(bind-ngIf="!editing")
+template(bind-ngIf="!isEditing()")
   td
     span.non-editing-control {{fund.value.symbol}}
   td
@@ -6,7 +6,7 @@ template(bind-ngIf="!editing")
   td
     button.btn.btn-primary(type="button", on-click="edit()") Edit
     button.btn.btn-danger(type="button", on-click="remove()") Delete
-template(bind-ngIf="editing")
+template(bind-ngIf="isEditing()")
   td
     input.form-control(bindon-ngModel="fund.value.symbol")
   td
@@ -14,4 +14,3 @@ template(bind-ngIf="editing")
   td
     button.btn.btn-success(type="submit", on-click="update()") Save
     button.btn.btn-danger(type="button", on-click="cancelEditing()") Cancel
-
