@@ -34,7 +34,6 @@ export class FundsComponent implements OnInit {
 
   public clearNew(): void {
     this.newFund = {
-      _id: "",
       name: "",
       symbol: ""
     };

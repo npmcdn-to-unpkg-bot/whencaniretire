@@ -6,8 +6,8 @@ export type FundKey = string;
 
 export interface Fund {
 
-  _id: FundID;
-  _rev: FundRev;
+  _id?: FundID;
+  _rev?: FundRev;
   symbol: FundSymbol;
   name: FundName;
 

@@ -197,25 +197,45 @@ class FundsRouter {
 
     let ids = Object.keys(jsonGraphArg.fundsById);
 
-    return ids.map(id => {
+
+    return Promise.all(ids.map(id => {
+
+      let overallResults: any[] = [];
 
       let obj = jsonGraphArg.fundsById[id];
 
-      this.db.find({
+      return this.db.find({
         selector: {
           _id: id
         }
       }).then(results => {
-
+        // runs when the db.find operation completes successfully
         let fields = Object.keys(obj);
         fields.forEach(f => {
           results.docs[0][f] = obj[f];
+          overallResults.push({
+            path: ["fundsById", id, f],
+            value: obj[f]
+          });
         });
 
+        return this.db.put(results.docs[0]).then(putResponse => {
+          // runs when the db put succeeds
+          return overallResults;
+        }).catch(err => {
+          // runs when the db put fails
+          // TODO add error handling
+          return [];
+        });
 
       });
 
-    })
+    })).then(x => {
+      // runs when the Promise.all completes
+      // flatten paths array of pathSets into single pathset
+      return [].concat.apply([], x);
+
+    });
 
 
   }
