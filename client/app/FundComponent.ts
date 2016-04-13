@@ -25,13 +25,21 @@ export class FundComponent implements OnInit {
     this.fundsService.edit(this.fund);
   }
 
+  public save(): void {
+    this.fundsService.save(this.fund);
+  }
+
+  public cancelEditing(): void {
+    this.fundsService.edit();
+  }
+
   public remove(f:any): void {
     //this.fundsService.model.call(["fundsById", f.value._id, "remove"]).then(x => console.log(x)).catch(e => console.error(e));
   }
 
   public isEditing(): boolean {
 
-    return this.fundsService.editingFund === this.fund.value._id;
+    return this.fundsService.isEditing(this.fund);
 
   }
 };

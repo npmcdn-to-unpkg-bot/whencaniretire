@@ -33,7 +33,7 @@ export class FundsService implements OnInit {
       source: new falcor.HttpDataSource("/api/model")
     }).batch();
 
-    this.editingFund = null;
+    this.edit();
   }
 
   public ngOnInit(): void {
@@ -41,8 +41,14 @@ export class FundsService implements OnInit {
 
   }
 
-  public edit(f:FundWrapper): void {
-    this.editingFund = f.value._id;
+  public edit(f:FundWrapper = null): void {
+    if(f === undefined || f === null) this.editingFund = null;
+    else this.editingFund = f.value._id;
+  }
+
+  public isEditing(f:FundWrapper): boolean {
+    if(f === undefined || f === null) return false;
+    else return this.editingFund === f.value._id;
   }
 
   public getFalcor(path: any): Observable<any> {
@@ -52,13 +58,31 @@ export class FundsService implements OnInit {
       .pluck("json");
   }
 
+  public save(f:FundWrapper): void {
+
+    console.log(" in save");
+    console.log(f);
+
+    this.model.set(
+      falcor.pathValue(["fundsById", f.value._id, "symbol"], f.value.symbol),
+      falcor.pathValue(["fundsById", f.value._id, "name"], f.value.name)
+    ).then(response => {
+    console.log("response");
+      console.log(response);
+    }).catch(error => {
+    console.log("error");
+      console.error(error);
+    });
+
+  }
+
   public getAll(page: number = 0): void {
 
     const pageSize = 25;
     let start = pageSize * page;
     let end = pageSize * (page + 1) - 1;
 
-    this.getFalcor(["funds", "data", {from : start, to: end}, ["_id", "symbol", "name"]]).subscribe(response => {
+    this.getFalcor(["funds", "data", {from : start, to: end}, ["_id", "_rev", "symbol", "name"]]).subscribe(response => {
       console.log(response);
       this.dataStore.funds.data = response.funds.data;
     });

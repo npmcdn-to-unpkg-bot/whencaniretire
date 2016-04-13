@@ -12,5 +12,5 @@ template(bind-ngIf="isEditing()")
   td
     input.form-control(bindon-ngModel="fund.value.name")
   td
-    button.btn.btn-success(type="submit", on-click="update()") Save
+    button.btn.btn-success(type="submit", on-click="save()") Save
     button.btn.btn-danger(type="button", on-click="cancelEditing()") Cancel

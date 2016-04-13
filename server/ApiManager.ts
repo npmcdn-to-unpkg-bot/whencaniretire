@@ -40,6 +40,10 @@ class FundsRouter {
       method: "get",
       impl: this.getFundsById
     },{
+      route: ["fundsById", FalcorRouter.keys, ["name","symbol"]],
+      method: "set",
+      impl: this.setFundsById
+    },{
       route: ["fundsById", FalcorRouter.keys, "remove"],
       method: "call",
       impl: this.remove
@@ -183,6 +187,36 @@ class FundsRouter {
     })).then(results => {
       return [].concat.apply([], results);
     });
+
+  }
+
+  private setFundsById(jsonGraphArg: any): any {
+
+    console.log("in setFundsById");
+    console.log(jsonGraphArg);
+
+    let ids = Object.keys(jsonGraphArg.fundsById);
+
+    return ids.map(id => {
+
+      let obj = jsonGraphArg.fundsById[id];
+
+      this.db.find({
+        selector: {
+          _id: id
+        }
+      }).then(results => {
+
+        let fields = Object.keys(obj);
+        fields.forEach(f => {
+          results.docs[0][f] = obj[f];
+        });
+
+
+      });
+
+    })
+
 
   }
 
