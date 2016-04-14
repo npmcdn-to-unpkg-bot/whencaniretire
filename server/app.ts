@@ -9,7 +9,7 @@ import * as path from "path";
 //import * as process from "process"; DOESN'T YET WORK, no typings
 let process = require("process");
 import * as routes from "./Routes";
-import {ApiManager} from "./ApiManager";
+import {RouterManager} from "./ApiManager";
 
 var app = express();
 
@@ -28,8 +28,8 @@ app.use("/assets", express.static(path.resolve(__dirname, "assets")));
 ["/", "/dashboard", "/funds", "/activity"].forEach((s) => {
   app.get(s, routes.index);
 });
-let apiManager = new ApiManager();
-app.use("/api", apiManager.router);
+//let apiManager = new ApiManager();
+app.use("/api", new RouterManager().expressRouter);
 app.get("/partials/:partial", routes.partials);
 app.get("/assets/*", routes.notfound);
 app.get("/favicon.ico", routes.notfound);
