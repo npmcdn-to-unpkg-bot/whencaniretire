@@ -1,36 +1,11 @@
-import {RouterManager, RouteImplementation} from "./ApiManager";
+import {RouterManager} from "./ApiManager";
+import {Microservice} from "./Microservice";
 let PouchDB = require("pouchdb");
 PouchDB.plugin(require("pouchdb-find"));
-let $json = require("json-stringify-safe");
+//let $json = require("json-stringify-safe");
 let path = require("path");
 let falcor = require("falcor");
 let FalcorRouter = require("falcor-router");
-
-export abstract class Microservice {
-
-  protected routeData: RouteImplementation[];
-  protected routerManager: RouterManager;
-
-  constructor(rm: RouterManager) {
-
-    this.routerManager = rm;
-
-  }
-
-
-  protected registerRoutes(): void {
-
-    this.routeData.forEach(r => {
-      let rt = {
-        route: r.route,
-      };
-      rt[r.method] = r.impl.bind(this);
-
-      this.routerManager.registerRoute(rt);
-    });
-
-  }
-};
 
 export class FundsMicroservice extends Microservice {
 

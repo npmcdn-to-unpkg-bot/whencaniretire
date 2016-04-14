@@ -1,20 +1,12 @@
-import {Request, Response, Router} from "express";
-import {GenericApi} from "./GenericApi";
-import {Database, SortDirection} from "./Database";
+import {Router as ExpressRouter} from "express";
 let falcorExpress = require("falcor-express");
 let FalcorRouter = require("falcor-router");
 import {FundsMicroservice} from "./FundsMicroservice";
 
-export interface RouteImplementation {
-
-  route: any[];
-  method: string;
-  impl: Function;
-}
 
 export class RouterManager {
 
-  public expressRouter: Router;
+  public expressRouter: ExpressRouter;
   private falcorRouter: any;
   private routeSet: any[];
   private routeObjects: any[];
@@ -22,7 +14,7 @@ export class RouterManager {
   constructor() {
 
     // setup express router
-    this.expressRouter = Router();
+    this.expressRouter = ExpressRouter();
 
     this.registerMicroservices();
 
@@ -45,8 +37,6 @@ export class RouterManager {
 
   public registerRoute(route: any): void {
 
-    console.log("registering route");
-    console.log(route);
     this.routeSet.push(route);
 
   }
